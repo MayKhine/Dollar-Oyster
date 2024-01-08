@@ -1,0 +1,45 @@
+[
+  {
+    "name": "Thirsty Scholar Pub",
+    "lat": 42.376311,
+    "lng": -71.104222,
+    "position": { "lat": 42.376311, "lng": -71.104222 },
+    "notes": "This laid-back bar offers $1 oysters every Tuesday. The deal starts at 4 p.m. and goes until they run out."
+  },
+  {
+    "name": "Sal + Stone",
+    "lat": 42.3940718,
+    "lng": -71.0789321,
+    "position": { "lat": 42.3940718, "lng": -71.0789321 },
+    "notes": "Salt + Stone in Somerville’s Assembly Row offers $1 oysters at the bar from Monday through Friday, 3 to 5 p.m."
+  },
+
+  {
+    "name": "Warren Tavern",
+    "lat": 42.3741694,
+    "lng": -71.0631664,
+    "position": { "lat": 42.3741694, "lng": -71.0631664 },
+    "notes": "Find $1 oysters at historic Charlestown spot Warren Tavern — which has counted George Washington and Paul Revere among its patrons — every weekday from 3 to 6 p.m."
+  },
+  {
+    "name": "Viale",
+    "lat": 42.3741694,
+    "lng": -71.0631664,
+    "position": { "lat": 42.3640063, "lng": -71.1018061 },
+    "notes": "Central Square restaurant Viale is shucking $1 oysters daily from 5 to 7 p.m.    "
+  },
+  {
+    "name": "State Street Provisions",
+    "lat": 42.3593857,
+    "lng": -71.0513553,
+    "position": { "lat": 42.3593857, "lng": -71.0513553 },
+    "notes": "Located along Boston’s landmark Long Wharf, State Street Provisions shucks oysters for $1 apiece every weeknight from 3 to 5 p.m."
+  },
+  {
+    "name": "Carrie Nation Cocktail Club",
+    "lat": 42.3583663,
+    "lng": -71.0616334,
+    "position": { "lat": 42.3583663, "lng": -71.0616334 },
+    "notes": "Swanky Beacon Hill spot Carrie Nation offers $1 oysters Tuesday through Thursday, 4 to 7 p.m."
+  }
+]

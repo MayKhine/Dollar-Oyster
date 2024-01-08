@@ -11,9 +11,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@babel/traverse": "^7.0.0-0",
+    "@babel/types": "^7.15.6",
+    "@stylexjs/stylex": "^0.3.0",
     "@vis.gl/react-google-maps": "^0.4.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "vite-plugin-stylex": "^0.4.1",
+    "vite-plugin-stylex-dev": "^0.2.2"
   },
   "devDependencies": {
     "@types/node": "^20.10.7",
@@ -26,6 +31,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "typescript": "^5.2.2",
-    "vite": "^5.0.8"
+    "vite": "^5.0.8",
+    "vite-plugin-stylex": "^0.4.1"
   }
 }

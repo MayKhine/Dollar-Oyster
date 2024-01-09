@@ -6,12 +6,12 @@ import {
   InfoWindow,
 } from "@vis.gl/react-google-maps"
 import * as stylex from "@stylexjs/stylex"
-import { googleMapApiKey } from "../../googleMapConfig"
+import { googleMapApiKey, googleMapID } from "../../googleMapConfig"
 import { useState } from "react"
 
 import { MapMarker, positionType } from "./MapMarker"
 import oysterData from "../../data/oysterData.json"
-import { extractLatAndLng } from "../../utils/geoHelper"
+// import { extractLatAndLng } from "../../utils/geoHelper"
 
 export const GoogleMap = () => {
   const boston = { lat: 42.36, lng: -71.1 }
@@ -26,18 +26,21 @@ export const GoogleMap = () => {
   }
 
   return (
-    <APIProvider apiKey={googleMapApiKey}>
-      <div {...stylex.props(googleMapStyles.base)}>
-        <Map zoom={12} center={boston}>
+    <div {...stylex.props(googleMapStyles.base)}>
+      <APIProvider apiKey={googleMapApiKey}>
+        <Map
+          {...stylex.props(googleMapStyles.map)}
+          zoom={12}
+          center={boston}
+          mapId={googleMapID}
+        >
           {oysterData.map((each, index) => {
-            const latLng = extractLatAndLng(each.googleMapLink)
-            const markerPosition = { lat: latLng[0], lng: latLng[1] }
+            // const latLng = extractLatAndLng(each.googleMapLink)
+            // const markerPosition = { lat: latLng[0], lng: latLng[1] }
             return (
               <MapMarker
                 key={index}
-                // position={each.position}
-                position={markerPosition}
-                text={each.name}
+                data={each}
                 onClickFn={() => {
                   clickHandler(each.position, each.name)
                 }}
@@ -46,27 +49,27 @@ export const GoogleMap = () => {
           })}
           {open && (
             <InfoWindow position={position} onCloseClick={() => setOpen(false)}>
-              <p> {text}</p>
+              <div>{text}</div>
             </InfoWindow>
           )}
-
-          {/* <AdvancedMarker
-            position={{ lat: 42.3940718, lng: -71.0789321 }}
-            title={"Oyster"}
-          >
-            <Pin
-              background={"red"}
-              borderColor={"green"}
-              glyphColor={"purple"}
-            ></Pin>
-          </AdvancedMarker> */}
         </Map>
-      </div>
-    </APIProvider>
+      </APIProvider>
+    </div>
   )
 }
 
 const googleMapStyles = stylex.create({
-  // base: { background: "pink", width: "50vw", height: "50vh" },
-  base: { background: "pink", width: "100%", height: "100%" },
+  base: {
+    background: "pink",
+    // width: "100%",
+    // height: "99%",
+    border: ".2rem black solid",
+    borderRadius: "3rem",
+    flex: "1",
+  },
+  map: {
+    width: "100%",
+    height: "100%",
+    borderRadius: "3rem",
+  },
 })

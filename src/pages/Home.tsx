@@ -5,6 +5,18 @@ import { MapDiv } from "../components/UI/MapDiv"
 import { RestaurantListDiv } from "../components/UI/RestaurantListDiv"
 import { LogoDiv } from "../components/UI/LogoDiv"
 
+export const Home = () => {
+  return (
+    <div {...stylex.props(appStyles.base)}>
+      <LogoDiv />
+      <div {...stylex.props(appStyles.layout)}>
+        <MapDiv />
+        <RestaurantListDiv />
+      </div>
+    </div>
+  )
+}
+
 const appStyles = stylex.create({
   base: {
     position: "relative",
@@ -24,15 +36,3 @@ const appStyles = stylex.create({
     height: "100%",
   },
 })
-
-export const Home = () => {
-  return (
-    <div {...stylex.props(appStyles.base)}>
-      <LogoDiv />
-      <div {...stylex.props(appStyles.layout)}>
-        <MapDiv />
-        <RestaurantListDiv />
-      </div>
-    </div>
-  )
-}

@@ -28,7 +28,7 @@ const MapDivStyles = stylex.create({
   fixedSide: {
     width: "45%",
     height: "100%",
-    backgroundColor: "gray",
+    // backgroundColor: "gray",
     position: "fixed",
     top: "3rem",
     flex: "0",

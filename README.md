@@ -11,5 +11,8 @@ pnpm install --save vite-plugin-stylex
 
 pnpm install @babel/traverse@^7.0.0-0 @babel/types@^7.15.6
 pnpm install vite-plugin-stylex-dev
+pnpm install react-router-dom
+pnpm install axios
+-- issue with vite plugin for stylex
 
 ref: https://boston.eater.com/maps/dollar-oysters-boston

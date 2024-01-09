@@ -15,8 +15,10 @@
     "@babel/types": "^7.15.6",
     "@stylexjs/stylex": "^0.3.0",
     "@vis.gl/react-google-maps": "^0.4.2",
+    "axios": "^1.6.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.21.1",
     "vite-plugin-stylex": "^0.4.1",
     "vite-plugin-stylex-dev": "^0.2.2"
   },

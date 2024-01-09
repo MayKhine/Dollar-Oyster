@@ -61,8 +61,8 @@ export const GoogleMap = () => {
 const googleMapStyles = stylex.create({
   base: {
     background: "pink",
-    // width: "100%",
-    // height: "99%",
+    width: "95%",
+    height: "70%",
     border: ".2rem black solid",
     borderRadius: "3rem",
     flex: "1",

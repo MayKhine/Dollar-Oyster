@@ -9,10 +9,10 @@ export const Home = () => {
   return (
     <div {...stylex.props(appStyles.base)}>
       <LogoDiv />
-      <div {...stylex.props(appStyles.layout)}>
-        <MapDiv />
-        <RestaurantListDiv />
-      </div>
+      {/* <div {...stylex.props(appStyles.layout)}> */}
+      <MapDiv />
+      <RestaurantListDiv />
+      {/* </div> */}
     </div>
   )
 }
@@ -21,8 +21,8 @@ const appStyles = stylex.create({
   base: {
     position: "relative",
     backgroundColor: "lightgray",
-    width: "100vw",
-    height: "100vh",
+    // width: "100vw",
+    // height: "100vh",
     display: "flex",
     flexDirection: "column",
   },
@@ -30,9 +30,8 @@ const appStyles = stylex.create({
   layout: {
     // width: "100vw",
     display: "flex",
-    backgroundColor: "lightgreen",
     // height: "50vh",
     // height: "70%",
-    height: "100%",
+    // height: "100%",
   },
 })

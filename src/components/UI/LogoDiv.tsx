@@ -9,4 +9,11 @@ export const LogoDiv = () => {
   )
 }
 
-const logoDivStyles = stylex.create({ base: { backgroundColor: colors.pink } })
+const logoDivStyles = stylex.create({
+  base: {
+    backgroundColor: colors.pink,
+    width: "80%",
+    height: "3rem",
+    position: "fixed",
+  },
+})

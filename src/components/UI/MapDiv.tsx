@@ -4,7 +4,7 @@ import { GoogleMap } from "../map/GoogleMap"
 
 export const MapDiv = () => {
   return (
-    <div {...stylex.props(MapDivStyles.base)}>
+    <div {...stylex.props(MapDivStyles.fixedSide)}>
       <div>Google Map </div>
       <div>Add a new place</div>
       <div>FILTER FEATURE</div>
@@ -23,5 +23,14 @@ const MapDivStyles = stylex.create({
     flexDirection: "column",
     // flex: "1",
     // height: "100vh",
+  },
+
+  fixedSide: {
+    width: "45%",
+    height: "100%",
+    backgroundColor: "gray",
+    position: "fixed",
+    top: "3rem",
+    flex: "0",
   },
 })

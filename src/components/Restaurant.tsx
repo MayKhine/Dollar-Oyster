@@ -19,12 +19,15 @@ export const Restaurant = ({ data }: RestaurantProps) => {
 
 const restaurantStyles = stylex.create({
   base: {
-    marginBottom: "1rem",
     display: "flex",
     flexDirection: "column",
+    // paddingBottom: "1rem",
     // flexGrow: "1",
     // width: "100%",
     // width: "50vw",
-    backgroundColor: colors.purple,
+    margin: "0",
+    marginBottom: "1rem",
+
+    backgroundColor: colors.pink,
   },
 })

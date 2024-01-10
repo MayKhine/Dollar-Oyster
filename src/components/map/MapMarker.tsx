@@ -1,7 +1,7 @@
 import { AdvancedMarker } from "@vis.gl/react-google-maps"
 // import { colors } from "../../assets/styles/tokens.stylex"
 import * as stylex from "@stylexjs/stylex"
-import oyster from "../../assets/images/oysterMarker.png"
+import oyster from "../../assets/images/oysterMarker2.png"
 
 export type MapMarkerProps = {
   onClickFn: () => void

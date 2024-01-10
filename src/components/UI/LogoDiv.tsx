@@ -12,22 +12,33 @@ export const LogoDiv = () => {
 
 const logoDivStyles = stylex.create({
   base: {
-    backgroundColor: colors.blue,
+    // backgroundColor: colors.green,
+    backgroundColor: colors.offwhite,
     width: "100%",
-    height: "5rem",
+    height: "3rem",
     position: "fixed",
     display: "flex",
     flexDirection: "row",
+    paddingTop: "1rem",
+    paddingBottom: "1rem",
+    borderBottom: `1px ${colors.darkBlue} solid`,
   },
+  imgDiv: { height: "3rem", display: "flex", flexDirection: "row" },
   image: {
-    marginLeft: "1rem",
+    marginLeft: "2rem",
     marginRight: "1rem",
     height: "100%",
-    // background: "white",
   },
   text: {
     alignSelf: "center",
-    fontWeight: "600",
-    fontSize: "2rem",
+    fontWeight: "400",
+    fontSize: "1.8rem",
+    color: colors.darkBlue,
+  },
+  line: {
+    width: "100%",
+    backgroundColor: "black",
+    marginTop: "1rem",
+    height: ".1rem",
   },
 })

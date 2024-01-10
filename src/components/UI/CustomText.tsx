@@ -27,7 +27,6 @@ export const CustomText = ({
 }
 
 const customTextStyles = stylex.create({
-  base: { backgroundColor: "white" },
   dynamicOptions: (color, fontWeight, bgColor, fontSize) => ({
     backgroundColor: bgColor,
     fontWeight: fontWeight,

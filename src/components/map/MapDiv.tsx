@@ -10,16 +10,19 @@ export const MapDiv = () => {
   return (
     <div {...stylex.props(MapDivStyles.fixedSide)}>
       {!addNewPlace && (
-        <CustomButton
-          text={"Add a new location"}
-          bgColor={colors.pink}
-          fontSize="1.3rem"
-          padding=".5rem"
-          onClickFn={() => {
-            console.log("WORK ON ADDING A NEW LOCATION")
-            setAddNewPlace(!addNewPlace)
-          }}
-        />
+        <div {...stylex.props(MapDivStyles.centerDiv)}>
+          <CustomButton
+            text={"Add a new location"}
+            bgColor={colors.darkBlue}
+            color={colors.offwhite}
+            fontSize="1rem"
+            padding=".5rem"
+            onClickFn={() => {
+              console.log("WORK ON ADDING A NEW LOCATION")
+              setAddNewPlace(!addNewPlace)
+            }}
+          />
+        </div>
       )}
       {addNewPlace && (
         <NewPlaceForm
@@ -43,12 +46,17 @@ const MapDivStyles = stylex.create({
     width: "45%",
     height: "100%",
     position: "fixed",
-    top: "5rem",
+    top: "7rem",
     flex: "0",
   },
 
   map: {
     padding: "2rem",
-    // backgroundColor: "red",
+    paddingLeft: "3rem",
+    paddingRight: "3rem",
+  },
+  centerDiv: {
+    display: "flex",
+    justifyContent: "center",
   },
 })

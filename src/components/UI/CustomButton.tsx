@@ -10,6 +10,7 @@ type CustomButtonProps = {
   onClickWithEventFn?: (event: React.FormEvent) => void
   padding?: string
   type?: string
+  borderColor?: string
 }
 export const CustomButton = ({
   text,
@@ -21,6 +22,7 @@ export const CustomButton = ({
   onClickWithEventFn,
   padding,
   type,
+  borderColor,
 }: CustomButtonProps) => {
   return (
     <button
@@ -30,7 +32,8 @@ export const CustomButton = ({
           fontWeight,
           bgColor,
           fontSize,
-          padding
+          padding,
+          borderColor
         )
       )}
       onClick={onClickWithEventFn ? onClickWithEventFn : onClickFn}
@@ -42,7 +45,14 @@ export const CustomButton = ({
 }
 
 const customButtonStyles = stylex.create({
-  dynamicOptions: (color, fontWeight, bgColor, fontSize, padding) => ({
+  dynamicOptions: (
+    color,
+    fontWeight,
+    bgColor,
+    fontSize,
+    padding,
+    borderColor
+  ) => ({
     backgroundColor: bgColor,
     fontWeight: fontWeight,
     color: color,
@@ -50,5 +60,8 @@ const customButtonStyles = stylex.create({
     cursor: "pointer",
     width: "max-content",
     padding: padding,
+    border: `2px ${borderColor} solid`,
+    borderRadius: ".3rem",
+    minWidth: "5rem",
   }),
 })

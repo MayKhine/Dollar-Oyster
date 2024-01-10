@@ -49,8 +49,9 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
       <div {...styex.props(newPlaceFormStyles.title)}>
         <CustomText
           text="New Dollar Oyster Deal"
-          fontSize="1.8rem"
-          fontWeight={300}
+          fontSize="1.4rem"
+          fontWeight={900}
+          color={colors.darkBlue}
         />
       </div>
       <form onSubmit={handleSubmit}>
@@ -106,17 +107,19 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
       </form>
       <div {...styex.props(newPlaceFormStyles.buttonsDiv)}>
         <CustomButton
-          text="cancel"
-          bgColor={colors.pink}
-          fontSize="1.3rem"
-          padding=".3rem"
+          text="Cancel"
+          bgColor={colors.darkBlue}
+          color={colors.offwhite}
+          fontSize="1rem"
+          padding=".5rem"
           onClickFn={cancelFn}
         />
         <CustomButton
-          text="add"
-          bgColor={colors.pink}
-          fontSize="1.3rem"
-          padding=".3rem"
+          text="Add"
+          bgColor={colors.darkBlue}
+          color={colors.offwhite}
+          fontSize="1rem"
+          padding=".5rem"
           type="submit"
           onClickWithEventFn={handleSubmit}
         />
@@ -127,11 +130,14 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
 
 const newPlaceFormStyles = styex.create({
   base: {
-    backgroundColor: "white",
-    margin: "1rem",
-    padding: "1rem",
-    border: "1px black solid",
+    // backgroundColor: colors.offwhite2,
+    backgroundColor: colors.green,
+    marginLeft: "2.5rem",
+    marginRight: "2.5rem",
+    padding: "1.5rem",
+    // border: "1px black solid",
     borderRadius: "1rem",
+    boxShadow: "1rem",
   },
   title: { display: "flex", justifyContent: "center", marginBottom: "1rem" },
 

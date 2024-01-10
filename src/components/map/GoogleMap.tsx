@@ -66,13 +66,13 @@ const googleMapStyles = stylex.create({
     background: "pink",
     width: "100%",
     height: "70vh",
-    border: `.2rem  ${colors.darkblue} solid`,
+    // border: `.2rem  ${colors.darkblue} solid`,
     borderRadius: "3rem",
     flex: "1",
   },
   map: {
     width: "100%",
     height: "100%",
-    borderRadius: "3rem",
+    // borderRadius: "3rem",
   },
 })

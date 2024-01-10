@@ -21,7 +21,7 @@ export const Home = () => {
 const appStyles = stylex.create({
   base: {
     position: "relative",
-    backgroundColor: colors.green,
+    backgroundColor: colors.offwhite,
     display: "flex",
     flexDirection: "column",
   },

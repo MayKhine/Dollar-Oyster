@@ -5,6 +5,7 @@ import { colors } from "../../assets/styles/tokens.stylex"
 import { Restaurant } from "./Restaurant"
 import { getPlaces } from "../../api/databaseFunc"
 import { restaurantDataType } from "../map/MapMarker"
+import { CustomText } from "../UI/CustomText"
 
 export const RestaurantListDiv = () => {
   const getPlacesQuery = useQuery({ queryKey: ["places"], queryFn: getPlaces })
@@ -15,8 +16,21 @@ export const RestaurantListDiv = () => {
 
   return (
     <div {...stylex.props(restaurantListDivStyles.scrollSide)}>
-      <div>Let's go for $1 Oyster around Boston</div>
+      <CustomText
+        text={"Let's go for $1 Oyster around Boston"}
+        color={colors.darkblue}
+        fontWeight={600}
+        bgColor={colors.offwhite}
+        fontSize="2rem"
+      />
 
+      <CustomText
+        text={"Small subtext Small subtext Small subtext"}
+        color={colors.darkblue}
+        fontWeight={200}
+        bgColor={colors.offwhite}
+        fontSize="1.3rem"
+      />
       {getPlacesQuery.isError && <div> Error </div>}
 
       {getPlacesQuery.isSuccess && getPlacesQuery.data.data.length == 0 && (
@@ -43,9 +57,9 @@ const restaurantListDivStyles = stylex.create({
     // overflowY: "scroll",
   },
   scrollSide: {
-    backgroundColor: colors.green,
+    backgroundColor: colors.green2,
     marginLeft: "45%",
-    marginTop: "3rem",
+    marginTop: "5rem",
     width: "55%",
     flex: "0",
   },

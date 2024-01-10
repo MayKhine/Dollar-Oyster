@@ -5,6 +5,7 @@ import { MapDiv } from "../components/map/MapDiv"
 import { RestaurantListDiv } from "../components/restaurant/RestaurantListDiv"
 import { LogoDiv } from "../components/UI/LogoDiv"
 import { getPlaces } from "../api/databaseFunc"
+import { colors } from "../assets/styles/tokens.stylex"
 
 export const Home = () => {
   getPlaces()
@@ -20,9 +21,7 @@ export const Home = () => {
 const appStyles = stylex.create({
   base: {
     position: "relative",
-    backgroundColor: "lightgray",
-    // width: "100vw",
-    // height: "100vh",
+    backgroundColor: colors.green,
     display: "flex",
     flexDirection: "column",
   },

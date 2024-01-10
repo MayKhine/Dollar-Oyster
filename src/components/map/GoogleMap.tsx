@@ -3,7 +3,7 @@ import * as stylex from "@stylexjs/stylex"
 import { googleMapApiKey, googleMapID } from "../../googleMapConfig"
 import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
-
+import { colors } from "../../assets/styles/tokens.stylex"
 import { MapMarker, positionType, restaurantDataType } from "./MapMarker"
 import { getPlaces } from "../../api/databaseFunc"
 
@@ -64,9 +64,9 @@ export const GoogleMap = () => {
 const googleMapStyles = stylex.create({
   base: {
     background: "pink",
-    width: "95%",
-    height: "70%",
-    border: ".2rem black solid",
+    width: "100%",
+    height: "70vh",
+    border: `.2rem  ${colors.darkblue} solid`,
     borderRadius: "3rem",
     flex: "1",
   },

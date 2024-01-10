@@ -20,11 +20,11 @@ const restaurantStyles = stylex.create({
   base: {
     display: "flex",
     flexDirection: "column",
-    marginBottom: "1rem",
     backgroundColor: colors.offwhite,
     border: ".2rem solid black",
     borderRadius: "1rem",
     padding: ".5rem",
+    margin: "1rem",
   },
   name: {
     fontSize: "1.5rem",

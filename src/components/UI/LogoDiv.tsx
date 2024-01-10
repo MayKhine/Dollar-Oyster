@@ -5,18 +5,16 @@ export const LogoDiv = () => {
   return (
     <div {...stylex.props(logoDivStyles.base)}>
       <img {...stylex.props(logoDivStyles.image)} src={oyster}></img>
-      <div {...stylex.props(logoDivStyles.text)}>
-        Boston Dollar Oysters Boston Dollar Oysters{" "}
-      </div>
+      <div {...stylex.props(logoDivStyles.text)}>Boston Dollar Oysters</div>
     </div>
   )
 }
 
 const logoDivStyles = stylex.create({
   base: {
-    backgroundColor: colors.pink,
+    backgroundColor: colors.blue,
     width: "100%",
-    height: "3rem",
+    height: "5rem",
     position: "fixed",
     display: "flex",
     flexDirection: "row",
@@ -29,5 +27,7 @@ const logoDivStyles = stylex.create({
   },
   text: {
     alignSelf: "center",
+    fontWeight: "600",
+    fontSize: "2rem",
   },
 })

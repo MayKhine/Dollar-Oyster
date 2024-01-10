@@ -1,5 +1,5 @@
-import { AdvancedMarker, Pin } from "@vis.gl/react-google-maps"
-import { colors } from "../../assets/styles/tokens.stylex"
+import { AdvancedMarker } from "@vis.gl/react-google-maps"
+// import { colors } from "../../assets/styles/tokens.stylex"
 import * as stylex from "@stylexjs/stylex"
 import oyster from "../../assets/images/oysterMarker.png"
 

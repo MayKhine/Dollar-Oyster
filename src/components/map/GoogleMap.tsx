@@ -1,19 +1,19 @@
-import {
-  APIProvider,
-  Map,
-  // AdvancedMarker,
-  // Pin,
-  InfoWindow,
-} from "@vis.gl/react-google-maps"
+import { APIProvider, Map, InfoWindow } from "@vis.gl/react-google-maps"
 import * as stylex from "@stylexjs/stylex"
 import { googleMapApiKey, googleMapID } from "../../googleMapConfig"
 import { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
 
-import { MapMarker, positionType } from "./MapMarker"
-import oysterData from "../../data/oysterData.json"
-// import { extractLatAndLng } from "../../utils/geoHelper"
+import { MapMarker, positionType, restaurantDataType } from "./MapMarker"
+import { getPlaces } from "../../api/databaseFunc"
 
 export const GoogleMap = () => {
+  const getPlacesQuery = useQuery({ queryKey: ["places"], queryFn: getPlaces })
+
+  if (getPlacesQuery.isSuccess) {
+    console.log("GET PLACES QUERY DATA in MAP: ", getPlacesQuery.data)
+  }
+
   const boston = { lat: 42.36, lng: -71.1 }
   const [open, setOpen] = useState(false)
   const [position, setPosition] = useState<positionType>()
@@ -34,19 +34,22 @@ export const GoogleMap = () => {
           center={boston}
           mapId={googleMapID}
         >
-          {oysterData.map((each, index) => {
-            // const latLng = extractLatAndLng(each.googleMapLink)
-            // const markerPosition = { lat: latLng[0], lng: latLng[1] }
-            return (
-              <MapMarker
-                key={index}
-                data={each}
-                onClickFn={() => {
-                  clickHandler(each.position, each.name)
-                }}
-              ></MapMarker>
-            )
-          })}
+          {getPlacesQuery.isSuccess &&
+            getPlacesQuery.data.data.map(
+              (place: restaurantDataType, index: number) => {
+                return (
+                  <MapMarker
+                    key={index}
+                    data={place}
+                    onClickFn={() => {
+                      const position = { lat: place.lat, lng: place.lng }
+                      clickHandler(position, place.name)
+                    }}
+                  ></MapMarker>
+                )
+              }
+            )}
+
           {open && (
             <InfoWindow position={position} onCloseClick={() => setOpen(false)}>
               <div>{text}</div>

@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { colors } from "../../assets/styles/tokens.stylex"
-import { GoogleMap } from "../map/GoogleMap"
+import { GoogleMap } from "./GoogleMap"
 
 export const MapDiv = () => {
   return (

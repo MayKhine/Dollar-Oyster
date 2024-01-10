@@ -1,13 +1,12 @@
-import { restaurantDataType } from "./map/MapMarker"
+import { restaurantDataType } from "../map/MapMarker"
 import * as stylex from "@stylexjs/stylex"
-import { colors } from "../assets/styles/tokens.stylex"
+import { colors } from "../../assets/styles/tokens.stylex"
 
 type RestaurantProps = {
   data: restaurantDataType
 }
 
 export const Restaurant = ({ data }: RestaurantProps) => {
-  console.log("RESTAURANT: ", data)
   return (
     <div {...stylex.props(restaurantStyles.base)}>
       <div {...stylex.props(restaurantStyles.name)}>{data.name}</div>

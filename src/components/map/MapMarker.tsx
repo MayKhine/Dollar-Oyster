@@ -8,6 +8,7 @@ export type MapMarkerProps = {
 }
 
 export type restaurantDataType = {
+  id: string
   name: string
   lat: number
   lng: number
@@ -27,18 +28,9 @@ export type positionType = {
 }
 
 export const MapMarker = ({ onClickFn, data }: MapMarkerProps) => {
+  const latlng = { lat: data.lat, lng: data.lng }
   return (
-    // <Marker
-    //   position={data.position}
-    //   title={data.name}
-    //   onClick={onClickFn}
-    // ></Marker>
-
-    <AdvancedMarker
-      position={data.position}
-      title={"Oyster"}
-      onClick={onClickFn}
-    >
+    <AdvancedMarker position={latlng} title={"Oyster"} onClick={onClickFn}>
       <Pin
         background={"red"}
         borderColor={colors.offwhite}

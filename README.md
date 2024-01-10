@@ -14,6 +14,15 @@ pnpm install vite-plugin-stylex-dev
 pnpm install react-router-dom
 pnpm install axios
 pnpm install @tanstack/react-query
+
+<!-- pnpm install react-google-autocomplete @types/googlemaps -->
+
+pnpm install use-places-autocomplete
+pnpm install --save-dev @types/google.maps // for use places type issue
+pnpm install --save use-places-autocomplete
+pnpm install @types/googlemaps@3.43.3
+
+pnpm install @react-google-maps/api
 -- issue with vite plugin for stylex
 
 ref: https://boston.eater.com/maps/dollar-oysters-boston

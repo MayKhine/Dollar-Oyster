@@ -1,15 +1,28 @@
 import * as stylex from "@stylexjs/stylex"
+import { useLoadScript } from "@react-google-maps/api"
+import { googleMapApiKey } from "../googleMapConfig"
+import { TestForm } from "./TestForm"
+
 export const Test = () => {
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: googleMapApiKey,
+    libraries: ["places"],
+  })
+
+  if (!isLoaded) return <div> LOading </div>
+
   return (
-    <div>
-      Google Map
-      <div {...stylex.props(testStyles.font1)}>Boston Dollar Oyster</div>
-      <div {...stylex.props(testStyles.font2)}>Boston Dollar Oyster</div>
-      <div {...stylex.props(testStyles.font3)}>Boston Dollar Oyster</div>
-      <div {...stylex.props(testStyles.font4)}>Boston Dollar Oyster</div>
-      <div {...stylex.props(testStyles.font5)}>Boston Dollar Oyster</div>
-      <div {...stylex.props(testStyles.font6)}>Boston Dollar Oyster</div>
-    </div>
+    // <div>
+    //   Google Map
+    //   <div {...stylex.props(testStyles.font1)}>Boston Dollar Oyster</div>
+    //   <div {...stylex.props(testStyles.font2)}>Boston Dollar Oyster</div>
+    //   <div {...stylex.props(testStyles.font3)}>Boston Dollar Oyster</div>
+    //   <div {...stylex.props(testStyles.font4)}>Boston Dollar Oyster</div>
+    //   <div {...stylex.props(testStyles.font5)}>Boston Dollar Oyster</div>
+    //   <div {...stylex.props(testStyles.font6)}>Boston Dollar Oyster</div>
+    // </div>
+
+    <TestForm></TestForm>
   )
 }
 

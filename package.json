@@ -13,17 +13,22 @@
   "dependencies": {
     "@babel/traverse": "^7.0.0-0",
     "@babel/types": "^7.15.6",
+    "@react-google-maps/api": "^2.19.2",
     "@stylexjs/stylex": "^0.3.0",
     "@tanstack/react-query": "^5.17.9",
+    "@types/googlemaps": "^3.43.3",
     "@vis.gl/react-google-maps": "^0.4.2",
     "axios": "^1.6.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-google-autocomplete": "^2.7.3",
     "react-router-dom": "^6.21.1",
+    "use-places-autocomplete": "^4.0.1",
     "vite-plugin-stylex": "^0.4.1",
     "vite-plugin-stylex-dev": "^0.2.2"
   },
   "devDependencies": {
+    "@types/google.maps": "^3.54.10",
     "@types/node": "^20.10.7",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",

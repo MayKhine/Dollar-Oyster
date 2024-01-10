@@ -7,7 +7,9 @@ type CustomButtonProps = {
   bgColor?: string
   fontSize?: string
   onClickFn?: () => void
+  onClickWithEventFn?: (event: React.FormEvent) => void
   padding?: string
+  type?: string
 }
 export const CustomButton = ({
   text,
@@ -16,10 +18,12 @@ export const CustomButton = ({
   bgColor,
   fontSize,
   onClickFn,
+  onClickWithEventFn,
   padding,
+  type,
 }: CustomButtonProps) => {
   return (
-    <div
+    <button
       {...stylex.props(
         customButtonStyles.dynamicOptions(
           color,
@@ -29,10 +33,11 @@ export const CustomButton = ({
           padding
         )
       )}
-      onClick={onClickFn}
+      onClick={onClickWithEventFn ? onClickWithEventFn : onClickFn}
+      type={type == "submit" ? "submit" : "button"}
     >
       {text}
-    </div>
+    </button>
   )
 }
 

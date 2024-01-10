@@ -10,14 +10,14 @@ import { CustomText } from "../UI/CustomText"
 export const RestaurantListDiv = () => {
   const getPlacesQuery = useQuery({ queryKey: ["places"], queryFn: getPlaces })
 
-  if (getPlacesQuery.isSuccess) {
-    console.log("GET PLACES QUERY DATA: ", getPlacesQuery.data)
-  }
+  // if (getPlacesQuery.isSuccess) {
+  //   console.log("GET PLACES QUERY DATA: ", getPlacesQuery.data)
+  // }
 
   return (
     <div {...stylex.props(restaurantListDivStyles.scrollSide)}>
       <CustomText
-        text={"Let's go for $1 Oyster around Boston"}
+        text={"Everyday is an oyster!"}
         color={colors.darkblue}
         fontWeight={600}
         bgColor={colors.offwhite}
@@ -25,7 +25,9 @@ export const RestaurantListDiv = () => {
       />
 
       <CustomText
-        text={"Small subtext Small subtext Small subtext"}
+        text={
+          "Have fun and discover one dollar oyster at a time! Cheers to the simple joys that make life delicious!"
+        }
         color={colors.darkblue}
         fontWeight={200}
         bgColor={colors.offwhite}

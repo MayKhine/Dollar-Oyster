@@ -20,8 +20,8 @@ const restaurantStyles = stylex.create({
   base: {
     display: "flex",
     flexDirection: "column",
-    backgroundColor: colors.offwhite,
-    border: ".2rem solid black",
+    // backgroundColor: colors.offwhite,
+    border: `.2rem solid ${colors.green}`,
     borderRadius: "1rem",
     padding: ".5rem",
     margin: "1rem",

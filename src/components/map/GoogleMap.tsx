@@ -10,9 +10,9 @@ import { getPlaces } from "../../api/databaseFunc"
 export const GoogleMap = () => {
   const getPlacesQuery = useQuery({ queryKey: ["places"], queryFn: getPlaces })
 
-  if (getPlacesQuery.isSuccess) {
-    console.log("GET PLACES QUERY DATA in MAP: ", getPlacesQuery.data)
-  }
+  // if (getPlacesQuery.isSuccess) {
+  //   console.log("GET PLACES QUERY DATA in MAP: ", getPlacesQuery.data)
+  // }
 
   const boston = { lat: 42.36, lng: -71.1 }
   const [open, setOpen] = useState(false)

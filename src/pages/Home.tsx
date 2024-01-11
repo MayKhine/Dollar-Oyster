@@ -6,9 +6,17 @@ import { RestaurantListDiv } from "../components/restaurant/RestaurantListDiv"
 import { LogoDiv } from "../components/UI/LogoDiv"
 import { getPlaces } from "../api/databaseFunc"
 import { colors } from "../assets/styles/tokens.stylex"
+import { useLoadScript } from "@react-google-maps/api"
+import { googleMapApiKey } from "../googleMapConfig"
 
 export const Home = () => {
   getPlaces()
+
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: googleMapApiKey,
+    libraries: ["places"],
+  })
+  if (!isLoaded) return <div> Loading </div>
 
   return (
     <div {...stylex.props(appStyles.base)}>

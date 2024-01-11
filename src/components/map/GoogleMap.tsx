@@ -3,7 +3,6 @@ import * as stylex from "@stylexjs/stylex"
 import { googleMapApiKey, googleMapID } from "../../googleMapConfig"
 import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
-import { colors } from "../../assets/styles/tokens.stylex"
 import { MapMarker, positionType, restaurantDataType } from "./MapMarker"
 import { getPlaces } from "../../api/databaseFunc"
 

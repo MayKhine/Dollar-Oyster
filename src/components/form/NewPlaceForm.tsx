@@ -1,6 +1,7 @@
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
+  getDetails,
 } from "use-places-autocomplete"
 
 import { CustomButton } from "../UI/CustomButton"
@@ -11,8 +12,7 @@ import { FormInput } from "../UI/FormInput"
 import { CustomText } from "../UI/CustomText"
 
 import { SuggestionDropDown } from "../UI/SuggestionDropDown"
-import { useLoadScript } from "@react-google-maps/api"
-import { googleMapApiKey } from "../../googleMapConfig"
+
 type NewPlaceFormProps = {
   cancelFn: () => void
 }
@@ -38,8 +38,9 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
     note: "",
   })
 
-  const handleInputChange = (element: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = element.target
+  // const handleInputChange = (element: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (value: string, id: string) => {
+    // const { id, value } = element.target
 
     setEnteredFormData({
       ...enteredFormData,
@@ -61,18 +62,24 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
   } = usePlacesAutocomplete()
 
   const handleSelectRestaurant = async (value: string) => {
+    const restaurantName = value.split(",")[0]
+    handleInputChange(restaurantName, "name")
+
     setValue(value, false)
     clearSuggestions()
     const results = await getGeocode({ address: value })
     const { lat, lng } = await getLatLng(results[0])
-    console.log("WHat is results: ", results, lat, lng)
-  }
 
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: googleMapApiKey,
-    libraries: ["places"],
-  })
-  if (!isLoaded) return <div> LOading </div>
+    console.log("WHat is results: ", results, lat, lng)
+
+    // const placeID = results[0].place_id
+    // const parameter = {
+    //   placeId: placeID,
+    //   fields: ["name"],
+    // }
+    // const detailResults = await getDetails(parameter)
+    // console.log("Detail requests: ", detailResults)
+  }
 
   return (
     <div {...stylex.props(newPlaceFormStyles.base)}>
@@ -98,12 +105,14 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
           <label {...stylex.props(newPlaceFormStyles.label)}>Name</label>
           <input
             {...stylex.props(newPlaceFormStyles.input)}
-            value={value}
-            id="restaurantName"
+            value={
+              enteredFormData.name.length == 0 ? value : enteredFormData.name
+            }
+            id="name"
             onChange={(event) => {
               setValue(event.target.value)
             }}
-            // disabled={!ready}
+            disabled={!ready}
             placeholder="Restaurant Name"
             autoComplete="off"
           ></input>
@@ -119,7 +128,7 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
           )}
         </div>
 
-        <FormInput
+        {/* <FormInput
           label="Dollar Deal"
           type="text"
           value={enteredFormData.note}
@@ -159,7 +168,7 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
           handleInputChangeFn={handleInputChange}
           id="address"
           placeholder="99 Harvard st ... "
-        />
+        /> */}
       </form>
       <div {...stylex.props(newPlaceFormStyles.buttonsDiv)}>
         <CustomButton

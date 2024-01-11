@@ -4,12 +4,16 @@ import { GoogleMap } from "./GoogleMap"
 import { CustomButton } from "../UI/CustomButton"
 import { useState } from "react"
 import { NewPlaceForm } from "../form/NewPlaceForm"
+
+import { GoogleMapLibLoadForm } from "../form/GoogleMapLibLoadForm"
 // import { googleMapApiKey } from "../../googleMapConfig"
 // import { useLoadScript } from "@react-google-maps/api"
 
 export const MapDiv = () => {
   const [addNewPlace, setAddNewPlace] = useState(false)
-
+  const cancelHandler = () => {
+    setAddNewPlace(!addNewPlace)
+  }
   return (
     <div {...stylex.props(MapDivStyles.fixedSide)}>
       {!addNewPlace && (
@@ -28,11 +32,8 @@ export const MapDiv = () => {
         </div>
       )}
       {addNewPlace && (
-        <NewPlaceForm
-          cancelFn={() => {
-            setAddNewPlace(!addNewPlace)
-          }}
-        />
+        <NewPlaceForm cancelFn={cancelHandler} />
+        // <GoogleMapLibLoadForm cancleFn={cancelHandler} />
       )}
 
       {!addNewPlace && (

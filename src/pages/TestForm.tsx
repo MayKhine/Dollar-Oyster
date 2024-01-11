@@ -1,9 +1,8 @@
-import { stat } from "fs"
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
 } from "use-places-autocomplete"
-import Dropdown from "../components/UI/DropDown"
+
 import { SuggestionDropDown } from "../components/UI/SuggestionDropDown"
 
 export const TestForm = () => {
@@ -20,11 +19,19 @@ export const TestForm = () => {
     clearSuggestions,
   } = usePlacesAutocomplete()
 
+  const selectHandle = async (value: string) => {
+    setValue(value, false)
+    clearSuggestions()
+    const results = await getGeocode({ address: value })
+    const { lat, lng } = await getLatLng(results[0])
+    console.log("WHat is results: ", results, lat, lng)
+  }
+
   // console.log("WHAT IS STATUS AND DATA", status, data)
 
   return (
     <div>
-      <form onSubmit={submitHandle}>
+      <form onSubmit={submitHandle} autoComplete="off">
         <div>
           <label>Restaurant Name</label>
           <input
@@ -35,12 +42,14 @@ export const TestForm = () => {
             }}
             disabled={!ready}
             placeholder="Restaurant Name"
+            autoComplete="off"
           ></input>
 
           {status === "OK" && data.length > 0 && (
             <SuggestionDropDown
               data={data}
               onSelectFn={(option: string) => {
+                selectHandle(option)
                 console.log("This ", option, " is selected")
               }}
             />

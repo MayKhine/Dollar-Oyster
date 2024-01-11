@@ -1,7 +1,6 @@
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
-  getDetails,
 } from "use-places-autocomplete"
 
 import { CustomButton } from "../UI/CustomButton"
@@ -37,6 +36,8 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
     // deal: "",
     note: "",
   })
+
+  const [selectedInput, setSelectedInput] = useState("")
 
   // const handleInputChange = (element: React.ChangeEvent<HTMLInputElement>) => {
   const handleInputChange = (value: string, id: string) => {
@@ -92,15 +93,6 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
         />
       </div>
       <form onSubmit={handleSubmit}>
-        {/* <FormInput
-          label="Name"
-          type="text"
-          value={enteredFormData.name}
-          handleInputChangeFn={handleInputChange}
-          id="name"
-          placeholder="Restaurant name ...."
-        /> */}
-
         <div {...stylex.props(newPlaceFormStyles.inputDiv)}>
           <label {...stylex.props(newPlaceFormStyles.label)}>Name</label>
           <input
@@ -111,13 +103,44 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
             id="name"
             onChange={(event) => {
               setValue(event.target.value)
+              setSelectedInput("name")
             }}
             disabled={!ready}
             placeholder="Restaurant Name"
             autoComplete="off"
           ></input>
 
-          {status === "OK" && data.length > 0 && (
+          {status === "OK" && selectedInput == "name" && data.length > 0 && (
+            <SuggestionDropDown
+              data={data}
+              onSelectFn={(option: string) => {
+                handleSelectRestaurant(option)
+                console.log("This ", option, " is selected")
+              }}
+            />
+          )}
+        </div>
+
+        <div {...stylex.props(newPlaceFormStyles.inputDiv)}>
+          <label {...stylex.props(newPlaceFormStyles.label)}>Address</label>
+          <input
+            {...stylex.props(newPlaceFormStyles.input)}
+            value={
+              enteredFormData.address.length == 0
+                ? value
+                : enteredFormData.address
+            }
+            id="address"
+            onChange={(event) => {
+              setValue(event.target.value)
+              setSelectedInput("address")
+            }}
+            disabled={!ready}
+            placeholder="Address"
+            autoComplete="off"
+          ></input>
+
+          {status === "OK" && selectedInput == "address" && data.length > 0 && (
             <SuggestionDropDown
               data={data}
               onSelectFn={(option: string) => {

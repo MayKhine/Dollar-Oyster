@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 
 type SuggestionDropDownProps = {
-  data: Array<object>
+  data: Array<google.maps.places.AutocompletePrediction>
   onSelectFn: (selection: string) => void
 }
 
@@ -12,7 +12,6 @@ export const SuggestionDropDown = ({
   return (
     <div {...stylex.props(suggestionDropDownStyles.base)}>
       {data.map((option, index) => {
-        console.log("Option: ", option)
         return (
           <div
             {...stylex.props(suggestionDropDownStyles.option)}

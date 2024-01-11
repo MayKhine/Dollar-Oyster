@@ -37,16 +37,16 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
     note: "",
   })
 
-  const [selectedInput, setSelectedInput] = useState("")
-
   // const handleInputChange = (element: React.ChangeEvent<HTMLInputElement>) => {
   const handleInputChange = (value: string, id: string) => {
-    // const { id, value } = element.target
+    console.log("IN THE HANDLE INPUT CHANGE: ", value, enteredFormData)
 
     setEnteredFormData({
       ...enteredFormData,
       [id]: value,
     })
+
+    console.log("IN THE HANDLE INPUT CHANGE AFTER: ", value, enteredFormData)
   }
 
   const handleSubmit = (event: React.FormEvent) => {
@@ -64,14 +64,21 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
 
   const handleSelectRestaurant = async (value: string) => {
     const restaurantName = value.split(",")[0]
-    handleInputChange(restaurantName, "name")
+    // handleInputChange(restaurantName, "name")
+    setEnteredFormData({ ...enteredFormData, name: restaurantName })
+    console.log("Entered from data 1 : ", enteredFormData)
 
     setValue(value, false)
     clearSuggestions()
     const results = await getGeocode({ address: value })
+
+    //change the address when you pick the restaurant
+    handleInputChange(results[0].formatted_address, "address")
+
     const { lat, lng } = await getLatLng(results[0])
 
     console.log("WHat is results: ", results, lat, lng)
+    console.log("Entered from data 2 : ", enteredFormData)
 
     // const placeID = results[0].place_id
     // const parameter = {
@@ -103,19 +110,18 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
             id="name"
             onChange={(event) => {
               setValue(event.target.value)
-              setSelectedInput("name")
+              // handleInputChange(event.target.value, "name")
             }}
             disabled={!ready}
             placeholder="Restaurant Name"
             autoComplete="off"
           ></input>
 
-          {status === "OK" && selectedInput == "name" && data.length > 0 && (
+          {status === "OK" && data.length > 0 && (
             <SuggestionDropDown
               data={data}
               onSelectFn={(option: string) => {
                 handleSelectRestaurant(option)
-                console.log("This ", option, " is selected")
               }}
             />
           )}
@@ -125,30 +131,14 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
           <label {...stylex.props(newPlaceFormStyles.label)}>Address</label>
           <input
             {...stylex.props(newPlaceFormStyles.input)}
-            value={
-              enteredFormData.address.length == 0
-                ? value
-                : enteredFormData.address
-            }
+            value={enteredFormData.address}
             id="address"
             onChange={(event) => {
-              setValue(event.target.value)
-              setSelectedInput("address")
+              handleInputChange(event.target.value, "address")
             }}
-            disabled={!ready}
             placeholder="Address"
             autoComplete="off"
           ></input>
-
-          {status === "OK" && selectedInput == "address" && data.length > 0 && (
-            <SuggestionDropDown
-              data={data}
-              onSelectFn={(option: string) => {
-                handleSelectRestaurant(option)
-                console.log("This ", option, " is selected")
-              }}
-            />
-          )}
         </div>
 
         {/* <FormInput

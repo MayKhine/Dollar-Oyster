@@ -9,6 +9,7 @@ import { colors } from "../assets/styles/tokens.stylex"
 
 export const Home = () => {
   getPlaces()
+
   return (
     <div {...stylex.props(appStyles.base)}>
       <LogoDiv />

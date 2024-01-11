@@ -4,9 +4,12 @@ import { GoogleMap } from "./GoogleMap"
 import { CustomButton } from "../UI/CustomButton"
 import { useState } from "react"
 import { NewPlaceForm } from "../form/NewPlaceForm"
+// import { googleMapApiKey } from "../../googleMapConfig"
+// import { useLoadScript } from "@react-google-maps/api"
 
 export const MapDiv = () => {
   const [addNewPlace, setAddNewPlace] = useState(false)
+
   return (
     <div {...stylex.props(MapDivStyles.fixedSide)}>
       {!addNewPlace && (

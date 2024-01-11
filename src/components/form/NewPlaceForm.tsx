@@ -1,10 +1,18 @@
+import usePlacesAutocomplete, {
+  getGeocode,
+  getLatLng,
+} from "use-places-autocomplete"
+
 import { CustomButton } from "../UI/CustomButton"
 import { colors } from "../../assets/styles/tokens.stylex"
-import * as styex from "@stylexjs/stylex"
+import * as stylex from "@stylexjs/stylex"
 import { useState } from "react"
 import { FormInput } from "../UI/FormInput"
 import { CustomText } from "../UI/CustomText"
 
+import { SuggestionDropDown } from "../UI/SuggestionDropDown"
+import { useLoadScript } from "@react-google-maps/api"
+import { googleMapApiKey } from "../../googleMapConfig"
 type NewPlaceFormProps = {
   cancelFn: () => void
 }
@@ -44,9 +52,31 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
     console.log("Handle Form Submit: what is in form data", enteredFormData)
   }
 
+  const {
+    ready,
+    value,
+    setValue,
+    suggestions: { status, data },
+    clearSuggestions,
+  } = usePlacesAutocomplete()
+
+  const handleSelectRestaurant = async (value: string) => {
+    setValue(value, false)
+    clearSuggestions()
+    const results = await getGeocode({ address: value })
+    const { lat, lng } = await getLatLng(results[0])
+    console.log("WHat is results: ", results, lat, lng)
+  }
+
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: googleMapApiKey,
+    libraries: ["places"],
+  })
+  if (!isLoaded) return <div> LOading </div>
+
   return (
-    <div {...styex.props(newPlaceFormStyles.base)}>
-      <div {...styex.props(newPlaceFormStyles.title)}>
+    <div {...stylex.props(newPlaceFormStyles.base)}>
+      <div {...stylex.props(newPlaceFormStyles.title)}>
         <CustomText
           text="New Dollar Oyster Deal"
           fontSize="1.4rem"
@@ -55,14 +85,40 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
         />
       </div>
       <form onSubmit={handleSubmit}>
-        <FormInput
+        {/* <FormInput
           label="Name"
           type="text"
           value={enteredFormData.name}
           handleInputChangeFn={handleInputChange}
           id="name"
           placeholder="Restaurant name ...."
-        />
+        /> */}
+
+        <div {...stylex.props(newPlaceFormStyles.inputDiv)}>
+          <label {...stylex.props(newPlaceFormStyles.label)}>Name</label>
+          <input
+            {...stylex.props(newPlaceFormStyles.input)}
+            value={value}
+            id="restaurantName"
+            onChange={(event) => {
+              setValue(event.target.value)
+            }}
+            // disabled={!ready}
+            placeholder="Restaurant Name"
+            autoComplete="off"
+          ></input>
+
+          {status === "OK" && data.length > 0 && (
+            <SuggestionDropDown
+              data={data}
+              onSelectFn={(option: string) => {
+                handleSelectRestaurant(option)
+                console.log("This ", option, " is selected")
+              }}
+            />
+          )}
+        </div>
+
         <FormInput
           label="Dollar Deal"
           type="text"
@@ -105,7 +161,7 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
           placeholder="99 Harvard st ... "
         />
       </form>
-      <div {...styex.props(newPlaceFormStyles.buttonsDiv)}>
+      <div {...stylex.props(newPlaceFormStyles.buttonsDiv)}>
         <CustomButton
           text="Cancel"
           bgColor={colors.darkBlue}
@@ -128,7 +184,7 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
   )
 }
 
-const newPlaceFormStyles = styex.create({
+const newPlaceFormStyles = stylex.create({
   base: {
     // backgroundColor: colors.offwhite2,
     backgroundColor: colors.green,
@@ -146,5 +202,35 @@ const newPlaceFormStyles = styex.create({
     gap: "1rem",
     justifyContent: "flex-end",
     paddingRight: "1rem",
+  },
+
+  inputDiv: {
+    // backgroundColor: colors.offwhite,
+    paddingLeft: "1rem",
+    paddingRight: "1rem",
+    paddingBottom: "1rem",
+    // padding: ".5rem",
+    display: "flex",
+    flexDirection: "column",
+    marginBottom: ".5rem",
+  },
+  label: {
+    fontWeight: "500",
+    fontSize: "1rem",
+    color: colors.darkBlue,
+    // backgroundColor: colors.blue,
+  },
+  input: {
+    fontWeight: 300,
+    fontSize: "1.1rem",
+    marginTop: ".5rem",
+    padding: ".5rem",
+    paddingLeft: "1rem",
+    paddingRight: "1rem",
+    // color: "gray",
+    "::placeholder": { color: "lightgray" },
+    border: "0px",
+    backgroundColor: colors.offwhite,
+    borderRadius: ".5rem",
   },
 })

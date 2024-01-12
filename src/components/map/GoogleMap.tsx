@@ -5,6 +5,7 @@ import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { MapMarker, positionType, restaurantDataType } from "./MapMarker"
 import { getPlaces } from "../../api/databaseFunc"
+import { colors } from "../../assets/styles/tokens.stylex"
 
 export const GoogleMap = () => {
   const getPlacesQuery = useQuery({ queryKey: ["places"], queryFn: getPlaces })
@@ -66,13 +67,13 @@ const googleMapStyles = stylex.create({
     width: "100%",
     // height: "70vh",
     height: "100%",
-    // border: `.2rem  ${colors.darkblue} solid`,
-    borderRadius: "3rem",
+    border: `.2rem  ${colors.darkBlue} solid`,
+    borderRadius: "1rem",
     flex: "1",
   },
   map: {
     width: "100%",
     height: "100%",
-    // borderRadius: "3rem",
+    borderRadius: "1rem",
   },
 })

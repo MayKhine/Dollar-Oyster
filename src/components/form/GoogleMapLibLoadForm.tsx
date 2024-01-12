@@ -1,5 +1,4 @@
 import { useLoadScript } from "@react-google-maps/api"
-import { NewPlaceForm } from "./NewPlaceForm"
 import { googleMapApiKey } from "../../googleMapConfig"
 
 type GoogleMapLibLoadFormProps = {
@@ -13,8 +12,6 @@ export const GoogleMapLibLoadForm = ({
     libraries: ["places"],
   })
   if (!isLoaded) return <div> Loading </div>
-
-  // return  <NewPlaceForm cancelFn={cancleFn} />
 
   return (
     <div>

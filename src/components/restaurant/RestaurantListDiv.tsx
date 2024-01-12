@@ -6,10 +6,16 @@ import { Restaurant } from "./Restaurant"
 import { getPlaces } from "../../api/databaseFunc"
 import { restaurantDataType } from "../map/MapMarker"
 import { CustomText } from "../UI/CustomText"
+import { useState } from "react"
+import { CustomButton } from "../UI/CustomButton"
+import { NewPlaceForm } from "../form/NewPlaceForm"
 
 export const RestaurantListDiv = () => {
   const getPlacesQuery = useQuery({ queryKey: ["places"], queryFn: getPlaces })
-
+  const [addNewPlace, setAddNewPlace] = useState(false)
+  const cancelHandler = () => {
+    setAddNewPlace(!addNewPlace)
+  }
   return (
     <div {...stylex.props(restaurantListDivStyles.scrollSide)}>
       <div {...stylex.props(restaurantListDivStyles.textDiv)}>
@@ -28,6 +34,27 @@ export const RestaurantListDiv = () => {
           bgColor={colors.offwhite}
           fontSize="1rem"
         />
+      </div>
+      <div>
+        {!addNewPlace && (
+          <div {...stylex.props(restaurantListDivStyles.centerDiv)}>
+            <CustomButton
+              text={"Add a new location"}
+              bgColor={colors.darkBlue}
+              color={colors.offwhite}
+              fontSize="1rem"
+              padding=".5rem"
+              onClickFn={() => {
+                console.log("WORK ON ADDING A NEW LOCATION")
+                setAddNewPlace(!addNewPlace)
+              }}
+            />
+          </div>
+        )}
+        {addNewPlace && (
+          <NewPlaceForm cancelFn={cancelHandler} />
+          // <GoogleMapLibLoadForm cancleFn={cancelHandler} />
+        )}
       </div>
 
       {getPlacesQuery.isError && <div> Error </div>}
@@ -66,5 +93,9 @@ const restaurantListDivStyles = stylex.create({
   listDiv: {
     paddingLeft: "1rem",
     paddingRight: "1rem",
+  },
+  centerDiv: {
+    display: "flex",
+    justifyContent: "center",
   },
 })

@@ -245,7 +245,7 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
 const newPlaceFormStyles = stylex.create({
   base: {
     // backgroundColor: colors.offwhite2,
-    backgroundColor: colors.green,
+    backgroundColor: colors.lightBlue,
     marginLeft: "2.5rem",
     marginRight: "2.5rem",
     padding: "1.5rem",

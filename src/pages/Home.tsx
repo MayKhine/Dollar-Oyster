@@ -41,7 +41,7 @@ const appStyles = stylex.create({
   main: {
     display: "flex",
     flexDirection: "row",
-    backgroundColor: "gray",
+    // backgroundColor: "gray",
     width: "100%",
   },
 })

@@ -38,11 +38,13 @@ export const SuggestionDropDown = ({
 
 const suggestionDropDownStyles = stylex.create({
   base: {
+    backgroundColor: "pink",
     border: ".1rem solid black",
-    overFlowY: "scroll",
-    height: "100%",
-    display: "flex",
+    overflowY: "scroll",
+    // height: "100%",
+    maxHeight: "15rem",
     flexDirection: "column",
+    position: "relative",
   },
   option: {
     backgroundColor: {
@@ -52,6 +54,6 @@ const suggestionDropDownStyles = stylex.create({
     padding: ".2rem",
   },
   dynamicOptions: (type) => ({
-    width: type == "time" ? "5rem" : "100%",
+    width: type == "time" ? "7rem" : "100%",
   }),
 })

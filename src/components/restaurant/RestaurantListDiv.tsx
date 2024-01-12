@@ -51,11 +51,13 @@ export const RestaurantListDiv = () => {
 
 const restaurantListDivStyles = stylex.create({
   scrollSide: {
-    // backgroundColor: colors.green,
+    backgroundColor: colors.green,
     marginLeft: "45%",
-    marginTop: "7rem",
-    width: "55%",
-    flex: "0",
+    marginTop: "5rem",
+    // width: "55%",
+
+    flex: "1",
+    // flex: "0",
   },
   textDiv: {
     paddingLeft: "2rem",

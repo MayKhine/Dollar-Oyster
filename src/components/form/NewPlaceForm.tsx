@@ -250,9 +250,9 @@ const newPlaceFormStyles = stylex.create({
     marginRight: "2.5rem",
     padding: "1.5rem",
     // border: "1px black solid",
-    borderRadius: "1rem",
+    // borderRadius: "1rem",
     boxShadow: "1rem",
-    height: "100vh",
+    height: "60%",
   },
   title: { display: "flex", justifyContent: "center", marginBottom: "1rem" },
 

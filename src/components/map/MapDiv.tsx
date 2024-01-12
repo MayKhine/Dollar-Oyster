@@ -13,8 +13,15 @@ export const MapDiv = () => {
   const cancelHandler = () => {
     setAddNewPlace(!addNewPlace)
   }
+
   return (
-    <div {...stylex.props(MapDivStyles.fixedSide)}>
+    // <div {...stylex.props(MapDivStyles.fixedSide)}>
+    <div
+      {...stylex.props(
+        MapDivStyles.base,
+        MapDivStyles.dynamicOption(addNewPlace)
+      )}
+    >
       {!addNewPlace && (
         <div {...stylex.props(MapDivStyles.centerDiv)}>
           <CustomButton
@@ -45,15 +52,26 @@ export const MapDiv = () => {
 }
 
 const MapDivStyles = stylex.create({
-  fixedSide: {
-    width: "45%",
-    height: "100%",
+  base: {
+    width: "40vw",
+    // height: "40rem",
+    backgroundColor: "pink",
+    marginTop: "5rem",
+    flex: "1",
     position: "fixed",
-    top: "7rem",
-    flex: "0",
   },
 
+  // fixedSide: {
+  //   width: "45%",
+  //   height: "100%",
+  //   position: "fixed",
+  //   top: "7rem",
+  //   flex: "0",
+  // },
+
   map: {
+    backgroundColor: "red",
+    height: "70vh",
     padding: "2rem",
     paddingLeft: "3rem",
     paddingRight: "3rem",
@@ -62,4 +80,8 @@ const MapDivStyles = stylex.create({
     display: "flex",
     justifyContent: "center",
   },
+
+  dynamicOption: (addNewPlace) => ({
+    position: addNewPlace == false ? "fixed" : null,
+  }),
 })

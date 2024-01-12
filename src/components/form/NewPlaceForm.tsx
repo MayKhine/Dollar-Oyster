@@ -3,7 +3,7 @@ import usePlacesAutocomplete, {
   getLatLng,
 } from "use-places-autocomplete"
 
-import DateTime from "luxon"
+import { DateTime } from "luxon"
 import { CustomButton } from "../UI/CustomButton"
 import { colors } from "../../assets/styles/tokens.stylex"
 import * as stylex from "@stylexjs/stylex"
@@ -12,6 +12,7 @@ import { FormInput } from "../UI/FormInput"
 import { CustomText } from "../UI/CustomText"
 
 import { SuggestionDropDown } from "../UI/SuggestionDropDown"
+import { time } from "console"
 
 type NewPlaceFormProps = {
   cancelFn: () => void
@@ -21,31 +22,29 @@ export type enterdFormDataType = {
   restaurantName: string
   restaurantLink: string
   googleMapLink: string
-  phone: string
   address: string
-  // deal: string
   note: string
+  deal: dollarDealType
 }
 
+type dollarDealType = {
+  days: Array<string>
+  from?: DateTime
+  to?: DateTime
+}
 export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
+  const [timeSelect, setTimeSelect] = useState("")
   const [enteredFormData, setEnteredFormData] = useState<enterdFormDataType>({
     restaurantName: "",
     restaurantLink: "",
     googleMapLink: "",
-    phone: "",
     address: "",
-    // deal: "",
     note: "",
+    deal: { days: [""] },
   })
 
-  // const handleInputChange = (element: React.ChangeEvent<HTMLInputElement>) => {
   const handleInputChange = (value: string, id: string) => {
     console.log("IN THE HANDLE INPUT CHANGE: ", value, enteredFormData)
-
-    // setEnteredFormData({
-    //   ...enteredFormData,
-    //   [id]: value,
-    // })
     setEnteredFormData((prevData) => ({
       ...prevData,
       [id]: value,
@@ -91,6 +90,43 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
     // console.log("Detail requests: ", detailResults)
   }
 
+  const generateTimeOptions = () => {
+    const start = DateTime.local().set({ hour: 7, minute: 0 })
+    const end = DateTime.local().set({ hour: 12, minute: 59 })
+    const afterMidNight = DateTime.local().set({ hour: 3, minute: 0 })
+    const timeOptions = []
+
+    let current = start
+
+    while (current <= end) {
+      // timeOptions.push({
+      //   label: current.toFormat("hh:mm a"),
+      //   value: current.toFormat("HH:mm"),
+      // })
+      timeOptions.push(current.toFormat("hh:mm a"))
+
+      // current = current.plus({ minutes: 15 })
+      current = current.plus({ minutes: 30 })
+    }
+
+    //reset current
+    current = DateTime.local().set({ hour: 0, minute: 0 })
+    while (current <= afterMidNight) {
+      // timeOptions.push({
+      //   label: current.toFormat("hh:mm a"),
+      //   value: current.toFormat("HH:mm"),
+      // })
+      timeOptions.push(current.toFormat("hh:mm a"))
+
+      current = current.plus({ minutes: 15 })
+    }
+
+    return timeOptions
+  }
+
+  const timeOptions = generateTimeOptions()
+  console.log("Time ", timeOptions)
+  const restaurantData = data.map((e) => e.description)
   return (
     <div {...stylex.props(newPlaceFormStyles.base)}>
       <div {...stylex.props(newPlaceFormStyles.title)}>
@@ -122,7 +158,7 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
 
           {status === "OK" && data.length > 0 && (
             <SuggestionDropDown
-              data={data}
+              data={restaurantData}
               onSelectFn={(option: string) => {
                 handleSelectRestaurant(option)
               }}
@@ -157,6 +193,29 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
             <div {...stylex.props(newPlaceFormStyles.day)}> Fri </div>
             <div {...stylex.props(newPlaceFormStyles.day)}> Sat </div>
             <div {...stylex.props(newPlaceFormStyles.day)}> Sun </div>
+          </div>
+          <div>
+            <label>From</label>
+            <select
+              {...stylex.props(newPlaceFormStyles.select)}
+              value="test"
+              onClick={() => {
+                console.log("what is time select", timeSelect)
+                setTimeSelect("from")
+              }}
+            >
+              <option value="0">Time</option>
+            </select>
+            {timeSelect == "from" && (
+              <SuggestionDropDown
+                data={timeOptions}
+                onSelectFn={(event) => {
+                  console.log("select: ", event)
+                  setTimeSelect("")
+                }}
+                type="time"
+              />
+            )}
           </div>
         </div>
       </form>
@@ -193,6 +252,7 @@ const newPlaceFormStyles = stylex.create({
     // border: "1px black solid",
     borderRadius: "1rem",
     boxShadow: "1rem",
+    height: "100vh",
   },
   title: { display: "flex", justifyContent: "center", marginBottom: "1rem" },
 
@@ -253,5 +313,10 @@ const newPlaceFormStyles = stylex.create({
     backgroundColor: colors.offwhite,
     width: "3rem",
     margin: ".1rem",
+  },
+  select: {
+    width: "6rem",
+    height: "1.5rem",
+    fontSize: "1rem",
   },
 })

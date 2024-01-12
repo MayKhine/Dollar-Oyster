@@ -19,6 +19,7 @@ specifiers:
   eslint: ^8.55.0
   eslint-plugin-react-hooks: ^4.6.0
   eslint-plugin-react-refresh: ^0.4.5
+  luxon: ^3.4.4
   react: ^18.2.0
   react-dom: ^18.2.0
   react-google-autocomplete: ^2.7.3
@@ -38,6 +39,7 @@ dependencies:
   '@types/googlemaps': 3.43.3
   '@vis.gl/react-google-maps': 0.4.2_biqbaboplfbrettd7655fr4n2y
   axios: 1.6.5
+  luxon: 3.4.4
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-google-autocomplete: 2.7.3_react@18.2.0
@@ -1697,6 +1699,11 @@ packages:
     dependencies:
       yallist: 4.0.0
     dev: true
+
+  /luxon/3.4.4:
+    resolution: {integrity: sha512-zobTr7akeGHnv7eBOXcRgMeCP6+uyYsczwmeRCauvpvaAltgNyTbLH/+VaEAPUeWBT+1GuNmz4wC/6jtQzbbVA==}
+    engines: {node: '>=12'}
+    dev: false
 
   /magic-string/0.30.5:
     resolution: {integrity: sha512-7xlpfBaQaP/T6Vh8MO/EqXSW5En6INHEvEXQiuff7Gku0PWjU3uf6w/j9o7O+SpB5fOAkrI5HeoNgwjEO0pFsA==}

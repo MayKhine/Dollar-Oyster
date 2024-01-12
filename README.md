@@ -25,4 +25,6 @@ pnpm install @types/googlemaps@3.43.3
 pnpm install @react-google-maps/api
 -- issue with vite plugin for stylex
 
+pnpm install luxon
+
 ref: https://boston.eater.com/maps/dollar-oysters-boston

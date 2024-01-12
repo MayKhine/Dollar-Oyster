@@ -3,6 +3,7 @@ import usePlacesAutocomplete, {
   getLatLng,
 } from "use-places-autocomplete"
 
+import DateTime from "luxon"
 import { CustomButton } from "../UI/CustomButton"
 import { colors } from "../../assets/styles/tokens.stylex"
 import * as stylex from "@stylexjs/stylex"
@@ -17,7 +18,7 @@ type NewPlaceFormProps = {
 }
 
 export type enterdFormDataType = {
-  name: string
+  restaurantName: string
   restaurantLink: string
   googleMapLink: string
   phone: string
@@ -28,7 +29,7 @@ export type enterdFormDataType = {
 
 export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
   const [enteredFormData, setEnteredFormData] = useState<enterdFormDataType>({
-    name: "",
+    restaurantName: "",
     restaurantLink: "",
     googleMapLink: "",
     phone: "",
@@ -41,10 +42,14 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
   const handleInputChange = (value: string, id: string) => {
     console.log("IN THE HANDLE INPUT CHANGE: ", value, enteredFormData)
 
-    setEnteredFormData({
-      ...enteredFormData,
+    // setEnteredFormData({
+    //   ...enteredFormData,
+    //   [id]: value,
+    // })
+    setEnteredFormData((prevData) => ({
+      ...prevData,
       [id]: value,
-    })
+    }))
 
     console.log("IN THE HANDLE INPUT CHANGE AFTER: ", value, enteredFormData)
   }
@@ -63,16 +68,13 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
   } = usePlacesAutocomplete()
 
   const handleSelectRestaurant = async (value: string) => {
-    const restaurantName = value.split(",")[0]
-    // handleInputChange(restaurantName, "name")
-    setEnteredFormData({ ...enteredFormData, name: restaurantName })
-    console.log("Entered from data 1 : ", enteredFormData)
-
     setValue(value, false)
     clearSuggestions()
     const results = await getGeocode({ address: value })
 
     //change the address when you pick the restaurant
+    const restaurantName = value.split(",")[0]
+    handleInputChange(restaurantName, "restaurantName")
     handleInputChange(results[0].formatted_address, "address")
 
     const { lat, lng } = await getLatLng(results[0])
@@ -105,12 +107,13 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
           <input
             {...stylex.props(newPlaceFormStyles.input)}
             value={
-              enteredFormData.name.length == 0 ? value : enteredFormData.name
+              enteredFormData.restaurantName.length == 0
+                ? value
+                : enteredFormData.restaurantName
             }
             id="name"
             onChange={(event) => {
               setValue(event.target.value)
-              // handleInputChange(event.target.value, "name")
             }}
             disabled={!ready}
             placeholder="Restaurant Name"
@@ -129,59 +132,33 @@ export const NewPlaceForm = ({ cancelFn }: NewPlaceFormProps) => {
 
         <div {...stylex.props(newPlaceFormStyles.inputDiv)}>
           <label {...stylex.props(newPlaceFormStyles.label)}>Address</label>
-          <input
-            {...stylex.props(newPlaceFormStyles.input)}
-            value={enteredFormData.address}
-            id="address"
-            onChange={(event) => {
-              handleInputChange(event.target.value, "address")
-            }}
-            placeholder="Address"
-            autoComplete="off"
-          ></input>
+          <div {...stylex.props(newPlaceFormStyles.inputGray)}>
+            {enteredFormData.address}
+          </div>
         </div>
-
-        {/* <FormInput
-          label="Dollar Deal"
-          type="text"
-          value={enteredFormData.note}
-          handleInputChangeFn={handleInputChange}
-          id="note"
-          placeholder="Dollar Oyster weekdays from 5pm to 11pm"
-        />
-
-        <FormInput
-          label="Google Map Link"
-          type="text"
-          value={enteredFormData.googleMapLink}
-          handleInputChangeFn={handleInputChange}
-          id="googleMapLink"
-          placeholder="www.googlemap.com ...."
-        />
         <FormInput
           label="Restaurant Link"
           type="text"
           value={enteredFormData.restaurantLink}
-          handleInputChangeFn={handleInputChange}
+          handleInputChangeFn={(event) => {
+            handleInputChange(event.target.value, "restaurantLink")
+          }}
           id="restaurantLink"
           placeholder="www.restaurant.com ...."
         />
-        <FormInput
-          label="Phone"
-          type="text"
-          value={enteredFormData.phone}
-          handleInputChangeFn={handleInputChange}
-          id="phone"
-          placeholder="617..."
-        />
-        <FormInput
-          label="Address"
-          type="text"
-          value={enteredFormData.address}
-          handleInputChangeFn={handleInputChange}
-          id="address"
-          placeholder="99 Harvard st ... "
-        /> */}
+
+        <div {...stylex.props(newPlaceFormStyles.inputDiv)}>
+          <label {...stylex.props(newPlaceFormStyles.label)}>Dollar Deal</label>
+          <div {...stylex.props(newPlaceFormStyles.deals)}>
+            <div {...stylex.props(newPlaceFormStyles.day)}> Mon </div>
+            <div {...stylex.props(newPlaceFormStyles.day)}> Tue </div>
+            <div {...stylex.props(newPlaceFormStyles.day)}> Wed </div>
+            <div {...stylex.props(newPlaceFormStyles.day)}>Thu </div>
+            <div {...stylex.props(newPlaceFormStyles.day)}> Fri </div>
+            <div {...stylex.props(newPlaceFormStyles.day)}> Sat </div>
+            <div {...stylex.props(newPlaceFormStyles.day)}> Sun </div>
+          </div>
+        </div>
       </form>
       <div {...stylex.props(newPlaceFormStyles.buttonsDiv)}>
         <CustomButton
@@ -243,6 +220,7 @@ const newPlaceFormStyles = stylex.create({
     // backgroundColor: colors.blue,
   },
   input: {
+    height: "1..5rem",
     fontWeight: 300,
     fontSize: "1.1rem",
     marginTop: ".5rem",
@@ -254,5 +232,26 @@ const newPlaceFormStyles = stylex.create({
     border: "0px",
     backgroundColor: colors.offwhite,
     borderRadius: ".5rem",
+  },
+  inputGray: {
+    height: "1.5rem",
+    fontWeight: 300,
+    fontSize: "1.1rem",
+    marginTop: ".5rem",
+    padding: ".5rem",
+    paddingLeft: "1rem",
+    paddingRight: "1rem",
+    // color: "gray",
+    "::placeholder": { color: "lightgray" },
+    border: "0px",
+    backgroundColor: "#DFDFDF",
+    borderRadius: ".5rem",
+  },
+  deals: { display: "flex" },
+
+  day: {
+    backgroundColor: colors.offwhite,
+    width: "3rem",
+    margin: ".1rem",
   },
 })

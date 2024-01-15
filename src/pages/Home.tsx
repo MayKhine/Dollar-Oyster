@@ -8,8 +8,14 @@ import { getPlaces } from "../api/databaseFunc"
 import { colors } from "../assets/styles/tokens.stylex"
 import { useLoadScript } from "@react-google-maps/api"
 import { googleMapApiKey } from "../googleMapConfig"
+import { useState } from "react"
+import { positionType } from "../components/map/MapMarker"
 
 export const Home = () => {
+  const boston = { lat: 42.36, lng: -71.1 }
+
+  const [mapPosition, setMapPosition] = useState(boston)
+  const [zoom, setZoom] = useState(12)
   getPlaces()
 
   const { isLoaded } = useLoadScript({
@@ -21,11 +27,24 @@ export const Home = () => {
   return (
     <div {...stylex.props(appStyles.base)}>
       <LogoDiv />
-      {/* <MapDiv />
-      <RestaurantListDiv /> */}
+
       <div {...stylex.props(appStyles.main)}>
-        <MapDiv />
-        <RestaurantListDiv />
+        <MapDiv
+          mapPosition={mapPosition}
+          setMapPosition={(position: positionType) => {
+            setMapPosition(position)
+          }}
+          zoom={zoom}
+        />
+        <RestaurantListDiv
+          mapPosition={mapPosition}
+          setMapPosition={(position: positionType) => {
+            setMapPosition(position)
+          }}
+          setZoom={(zoom) => {
+            setZoom(zoom)
+          }}
+        />
       </div>
     </div>
   )

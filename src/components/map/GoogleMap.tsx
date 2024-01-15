@@ -7,14 +7,15 @@ import { MapMarker, positionType, restaurantDataType } from "./MapMarker"
 import { getPlaces } from "../../api/databaseFunc"
 import { colors } from "../../assets/styles/tokens.stylex"
 
-export const GoogleMap = () => {
+type GoogleMapProps = {
+  mapPosition: positionType
+  setMapPosition?: (position: positionType) => void
+  zoom: number
+}
+export const GoogleMap = ({ mapPosition, zoom }: GoogleMapProps) => {
   const getPlacesQuery = useQuery({ queryKey: ["places"], queryFn: getPlaces })
+  console.log("What is map Position in Map : ", mapPosition)
 
-  // if (getPlacesQuery.isSuccess) {
-  //   console.log("GET PLACES QUERY DATA in MAP: ", getPlacesQuery.data)
-  // }
-
-  const boston = { lat: 42.36, lng: -71.1 }
   const [open, setOpen] = useState(false)
   const [position, setPosition] = useState<positionType>()
   const [text, setText] = useState("")
@@ -30,8 +31,8 @@ export const GoogleMap = () => {
       <APIProvider apiKey={googleMapApiKey}>
         <Map
           {...stylex.props(googleMapStyles.map)}
-          zoom={12}
-          center={boston}
+          zoom={zoom}
+          center={mapPosition}
           mapId={googleMapID}
         >
           {getPlacesQuery.isSuccess &&

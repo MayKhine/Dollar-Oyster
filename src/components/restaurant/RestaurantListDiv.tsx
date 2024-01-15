@@ -4,13 +4,22 @@ import { useQuery } from "@tanstack/react-query"
 import { colors } from "../../assets/styles/tokens.stylex"
 import { Restaurant } from "./Restaurant"
 import { getPlaces } from "../../api/databaseFunc"
-import { restaurantDataType } from "../map/MapMarker"
+import { positionType, restaurantDataType } from "../map/MapMarker"
 import { CustomText } from "../UI/CustomText"
 import { useState } from "react"
 import { CustomButton } from "../UI/CustomButton"
 import { NewPlaceForm } from "../form/NewPlaceForm"
 
-export const RestaurantListDiv = () => {
+type RestaurantListDivProps = {
+  mapPosition: positionType
+  setMapPosition: (position: positionType) => void
+  setZoom: (zoom: number) => void
+}
+export const RestaurantListDiv = ({
+  mapPosition,
+  setMapPosition,
+  setZoom,
+}: RestaurantListDivProps) => {
   const getPlacesQuery = useQuery({ queryKey: ["places"], queryFn: getPlaces })
   const [addNewPlace, setAddNewPlace] = useState(false)
   const cancelHandler = () => {
@@ -45,14 +54,18 @@ export const RestaurantListDiv = () => {
               fontSize="1rem"
               padding=".5rem"
               onClickFn={() => {
-                console.log("WORK ON ADDING A NEW LOCATION")
                 setAddNewPlace(!addNewPlace)
               }}
             />
           </div>
         )}
         {addNewPlace && (
-          <NewPlaceForm cancelFn={cancelHandler} />
+          <NewPlaceForm
+            cancelFn={cancelHandler}
+            mapPosition={mapPosition}
+            setMapPosition={setMapPosition}
+            setZoom={setZoom}
+          />
           // <GoogleMapLibLoadForm cancleFn={cancelHandler} />
         )}
       </div>

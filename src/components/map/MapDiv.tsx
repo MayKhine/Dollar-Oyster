@@ -1,19 +1,26 @@
 import * as stylex from "@stylexjs/stylex"
-import { colors } from "../../assets/styles/tokens.stylex"
+// import { colors } from "../../assets/styles/tokens.stylex"
 import { GoogleMap } from "./GoogleMap"
-import { CustomButton } from "../UI/CustomButton"
-import { useState } from "react"
-import { NewPlaceForm } from "../form/NewPlaceForm"
+// import { CustomButton } from "../UI/CustomButton"
+// import { useState } from "react"
+// import { NewPlaceForm } from "../form/NewPlaceForm"
+import { positionType } from "./MapMarker"
 
-// import { googleMapApiKey } from "../../googleMapConfig"
-// import { useLoadScript } from "@react-google-maps/api"
-
-export const MapDiv = () => {
+type MapDivProps = {
+  mapPosition: positionType
+  setMapPosition: (position: positionType) => void
+  zoom: number
+}
+export const MapDiv = ({ mapPosition, setMapPosition, zoom }: MapDivProps) => {
   return (
     // <div {...stylex.props(MapDivStyles.fixedSide)}>
     <div {...stylex.props(MapDivStyles.base)}>
       <div {...stylex.props(MapDivStyles.map)}>
-        <GoogleMap />
+        <GoogleMap
+          mapPosition={mapPosition}
+          setMapPosition={setMapPosition}
+          zoom={zoom}
+        />
       </div>
     </div>
   )

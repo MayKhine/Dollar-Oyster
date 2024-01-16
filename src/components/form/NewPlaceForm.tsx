@@ -13,6 +13,7 @@ import { CustomText } from "../UI/CustomText"
 
 import { SuggestionDropDown } from "../UI/SuggestionDropDown"
 import { positionType } from "../map/MapMarker"
+// import { OverlayModal } from "../UI/OverlayModal"
 
 type NewPlaceFormProps = {
   cancelFn: () => void
@@ -42,7 +43,7 @@ export const NewPlaceForm = ({
 }: NewPlaceFormProps) => {
   const [timeSelect, setTimeSelect] = useState("")
   const [dealTimes, setDealTimes] = useState({ from: "", to: "" })
-
+  // const [overlay, setOverlay] = useState(false)
   const [enteredFormData, setEnteredFormData] = useState<enterdFormDataType>({
     restaurantName: "",
     restaurantLink: "",
@@ -91,6 +92,7 @@ export const NewPlaceForm = ({
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
+    // setOverlay(true)
     const boston = { lat: 42.36, lng: -71.1 }
     setMapPosition(boston)
 
@@ -154,6 +156,7 @@ export const NewPlaceForm = ({
   const restaurantData = data.map((e) => e.description)
   return (
     <div {...stylex.props(newPlaceFormStyles.base)}>
+      {/* {overlay && <OverlayModal title="over lay title" text="overlay text" />} */}
       <div {...stylex.props(newPlaceFormStyles.title)}>
         <CustomText
           text="New Dollar Oyster Deal"
@@ -215,14 +218,6 @@ export const NewPlaceForm = ({
         <div {...stylex.props(newPlaceFormStyles.inputDiv)}>
           <label {...stylex.props(newPlaceFormStyles.label)}>Dollar Deal</label>
           <div {...stylex.props(newPlaceFormStyles.dealdays)}>
-            {/* <div
-              {...stylex.props(
-                newPlaceFormStyles.label,
-                newPlaceFormStyles.dayLabel
-              )}
-            >
-              Days
-            </div> */}
             <div
               {...stylex.props(
                 newPlaceFormStyles.day,
@@ -492,7 +487,7 @@ const newPlaceFormStyles = stylex.create({
     marginLeft: "3.1rem",
   },
   day: {
-    width: "4rem",
+    width: "3rem",
     padding: ".5rem",
     margin: ".1rem",
     height: "1.5rem",

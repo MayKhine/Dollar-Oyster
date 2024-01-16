@@ -31,13 +31,15 @@ export type enterdFormDataType = {
 }
 
 type dollarDealType = {
-  days: Array<string>
-  from?: DateTime
-  to?: DateTime
+  // days: Array<string>
+  days: Array<number>
+  from: string
+  to: string
+  // from?: DateTime
+  // to?: DateTime
 }
 export const NewPlaceForm = ({
   cancelFn,
-  mapPosition,
   setMapPosition,
   setZoom,
 }: NewPlaceFormProps) => {
@@ -50,14 +52,45 @@ export const NewPlaceForm = ({
     googleMapLink: "",
     address: "",
     note: "",
-    deal: { days: [""] },
+    // deal: { days: ["", "", "", "", "", "", ""] },
+    deal: { days: [0, 0, 0, 0, 0, 0, 0], from: "", to: "" },
   })
 
-  const handleInputChange = (value: string, id: string) => {
-    setEnteredFormData((prevData) => ({
-      ...prevData,
-      [id]: value,
-    }))
+  const handleInputChange = (value: string, id: string, index?: number) => {
+    console.log("Handle Input Change value: ", value, "id: ", id)
+
+    // deal: days
+    if (id == "days" && index != undefined) {
+      const currentDeal = enteredFormData["deal"]
+
+      if (currentDeal["days"][index] == 1) {
+        currentDeal["days"][index] = 0
+        setEnteredFormData((prevData) => ({
+          ...prevData,
+          ["deal"]: currentDeal,
+        }))
+      } else {
+        // currentDeal["days"][index] = value
+        currentDeal["days"][index] = 1
+        setEnteredFormData((prevData) => ({
+          ...prevData,
+          ["deal"]: currentDeal,
+        }))
+      }
+    } else if ((id == "from" || id == "to") && value != undefined) {
+      const currentDeal = enteredFormData["deal"]
+      currentDeal[id] = value
+
+      setEnteredFormData((prevData) => ({
+        ...prevData,
+        ["deal"]: currentDeal,
+      }))
+    } else {
+      setEnteredFormData((prevData) => ({
+        ...prevData,
+        [id]: value,
+      }))
+    }
   }
 
   const handleSubmit = (event: React.FormEvent) => {
@@ -65,7 +98,11 @@ export const NewPlaceForm = ({
     const boston = { lat: 42.36, lng: -71.1 }
     setMapPosition(boston)
 
-    console.log("Handle Form Submit: what is in form data", enteredFormData)
+    console.log(
+      "Handle Form Submit: what is in form data",
+      dealTimes,
+      enteredFormData
+    )
   }
 
   const {
@@ -182,54 +219,151 @@ export const NewPlaceForm = ({
         <div {...stylex.props(newPlaceFormStyles.inputDiv)}>
           <label {...stylex.props(newPlaceFormStyles.label)}>Dollar Deal</label>
           <div {...stylex.props(newPlaceFormStyles.deals)}>
-            <div {...stylex.props(newPlaceFormStyles.day)}> Mon </div>
-            <div {...stylex.props(newPlaceFormStyles.day)}> Tue </div>
-            <div {...stylex.props(newPlaceFormStyles.day)}> Wed </div>
-            <div {...stylex.props(newPlaceFormStyles.day)}>Thu </div>
-            <div {...stylex.props(newPlaceFormStyles.day)}> Fri </div>
-            <div {...stylex.props(newPlaceFormStyles.day)}> Sat </div>
-            <div {...stylex.props(newPlaceFormStyles.day)}> Sun </div>
-          </div>
-          <div>
-            <label>From</label>
-            {/* <select
-              {...stylex.props(newPlaceFormStyles.select)}
-              value="test"
+            <div
+              {...stylex.props(
+                newPlaceFormStyles.day,
+                newPlaceFormStyles.dynamicBg(enteredFormData["deal"]["days"][0])
+              )}
               onClick={() => {
-                console.log("what is time select", timeSelect)
-                setTimeSelect("from")
+                handleInputChange("deal", "days", 0)
               }}
             >
-              <option value="0">Time</option>
-            </select> */}
-
-            <input
-              {...stylex.props(newPlaceFormStyles.select)}
+              Mon
+            </div>
+            <div
+              {...stylex.props(
+                newPlaceFormStyles.day,
+                newPlaceFormStyles.dynamicBg(enteredFormData["deal"]["days"][1])
+              )}
               onClick={() => {
-                console.log("what is time select", timeSelect)
-                setTimeSelect("from")
+                handleInputChange("deal", "days", 1)
               }}
-              value={dealTimes.from}
-              type="text"
-              placeholder="5:00pm"
-              onChange={() => {
-                console.log("On Change")
+            >
+              Tue
+            </div>
+            <div
+              {...stylex.props(
+                newPlaceFormStyles.day,
+                newPlaceFormStyles.dynamicBg(enteredFormData["deal"]["days"][2])
+              )}
+              onClick={() => {
+                handleInputChange("deal", "days", 2)
               }}
-            ></input>
-            {timeSelect == "from" && (
-              <SuggestionDropDown
-                data={timeOptions}
-                onSelectFn={(event) => {
-                  console.log("select: ", event)
-                  setDealTimes((prevVal) => ({
-                    ...prevVal,
-                    ["from"]: event,
-                  }))
-                  setTimeSelect("")
+            >
+              Wed
+            </div>
+            <div
+              {...stylex.props(
+                newPlaceFormStyles.day,
+                newPlaceFormStyles.dynamicBg(enteredFormData["deal"]["days"][3])
+              )}
+              onClick={() => {
+                handleInputChange("deal", "days", 3)
+              }}
+            >
+              Thu
+            </div>
+            <div
+              {...stylex.props(
+                newPlaceFormStyles.day,
+                newPlaceFormStyles.dynamicBg(enteredFormData["deal"]["days"][4])
+              )}
+              onClick={() => {
+                handleInputChange("deal", "days", 4)
+              }}
+            >
+              Fri
+            </div>
+            <div
+              {...stylex.props(
+                newPlaceFormStyles.day,
+                newPlaceFormStyles.dynamicBg(enteredFormData["deal"]["days"][5])
+              )}
+              onClick={() => {
+                handleInputChange("deal", "days", 5)
+              }}
+            >
+              Sat
+            </div>
+            <div
+              {...stylex.props(
+                newPlaceFormStyles.day,
+                newPlaceFormStyles.dynamicBg(enteredFormData["deal"]["days"][6])
+              )}
+              onClick={() => {
+                handleInputChange("deal", "days", 6)
+              }}
+            >
+              Sun
+            </div>
+          </div>
+          <div {...stylex.props(newPlaceFormStyles.deals)}>
+            <div>
+              <label>From</label>
+
+              <input
+                {...stylex.props(newPlaceFormStyles.select)}
+                onClick={() => {
+                  console.log("what is time select", timeSelect)
+                  setTimeSelect("from")
                 }}
-                type="time"
-              />
-            )}
+                value={dealTimes.from}
+                type="text"
+                placeholder="5:00pm"
+                onChange={() => {
+                  console.log("On Change")
+                }}
+              ></input>
+              {timeSelect == "from" && (
+                <SuggestionDropDown
+                  data={timeOptions}
+                  onSelectFn={(event) => {
+                    handleInputChange(event, "from")
+
+                    console.log("select: ", event)
+                    setDealTimes((prevVal) => ({
+                      ...prevVal,
+                      ["from"]: event,
+                    }))
+                    setTimeSelect("")
+                  }}
+                  type="time"
+                />
+              )}
+            </div>
+            <div>
+              <label>To</label>
+
+              <input
+                {...stylex.props(newPlaceFormStyles.select)}
+                onClick={() => {
+                  console.log("what is time select", timeSelect)
+                  setTimeSelect("to")
+                }}
+                value={dealTimes.to}
+                type="text"
+                placeholder="5:00pm"
+                onChange={() => {
+                  console.log("On Change")
+                }}
+              ></input>
+              {timeSelect == "to" && (
+                <SuggestionDropDown
+                  data={timeOptions}
+                  onSelectFn={(event) => {
+                    handleInputChange(event, "to")
+
+                    console.log("select: ", event)
+                    setDealTimes((prevVal) => ({
+                      ...prevVal,
+                      ["to"]: event,
+                    }))
+                    setTimeSelect("")
+                  }}
+                  type="time"
+                />
+              )}
+            </div>
           </div>
         </div>
       </form>
@@ -329,8 +463,12 @@ const newPlaceFormStyles = stylex.create({
     margin: ".1rem",
   },
   select: {
-    width: "6rem",
+    width: "7rem",
     height: "1.5rem",
     fontSize: "1rem",
+    borderRadius: ".2rem",
   },
+  dynamicBg: (selected) => ({
+    backgroundColor: selected == 0 ? "lightgray" : "gray",
+  }),
 })

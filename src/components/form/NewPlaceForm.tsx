@@ -3,6 +3,7 @@ import usePlacesAutocomplete, {
   getLatLng,
 } from "use-places-autocomplete"
 
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { DateTime } from "luxon"
 import { CustomButton } from "../UI/CustomButton"
 import { colors } from "../../assets/styles/tokens.stylex"
@@ -13,6 +14,8 @@ import { CustomText } from "../UI/CustomText"
 
 import { SuggestionDropDown } from "../UI/SuggestionDropDown"
 import { positionType } from "../map/MapMarker"
+import { ErrorText } from "../UI/ErrorText"
+import { addPlace } from "../../api/databaseFunc"
 // import { OverlayModal } from "../UI/OverlayModal"
 
 type NewPlaceFormProps = {
@@ -36,13 +39,27 @@ type dollarDealType = {
   from: string
   to: string
 }
+
 export const NewPlaceForm = ({
   cancelFn,
   setMapPosition,
   setZoom,
 }: NewPlaceFormProps) => {
+  const queryClient = useQueryClient()
+  const addPlaceMutation = useMutation({
+    mutationFn: addPlace,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["places"] })
+    },
+  })
+
   const [timeSelect, setTimeSelect] = useState("")
-  const [dealTimes, setDealTimes] = useState({ from: "", to: "" })
+  const [enteredFormError, setEnteredFormError] = useState({
+    restaurantName: "",
+    days: "",
+    from: "",
+    to: "",
+  })
   // const [overlay, setOverlay] = useState(false)
   const [enteredFormData, setEnteredFormData] = useState<enterdFormDataType>({
     restaurantName: "",
@@ -92,15 +109,73 @@ export const NewPlaceForm = ({
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
-    // setOverlay(true)
-    const boston = { lat: 42.36, lng: -71.1 }
-    setMapPosition(boston)
 
-    console.log(
-      "Handle Form Submit: what is in form data",
-      dealTimes,
-      enteredFormData
-    )
+    console.log("Handle Form Submit: what is in form data", enteredFormData)
+
+    //check name is not empty and address is not empty
+    // days are not empty and date is not empty
+    let totalDealDays = 0
+    enteredFormData.deal.days.map((day) => {
+      totalDealDays += day
+    })
+
+    if (
+      enteredFormData.restaurantName.length == 0 ||
+      enteredFormData.address.length == 0
+    ) {
+      setEnteredFormError((prevVal) => ({
+        ...prevVal,
+        ["restaurantName"]: "Restaurant name cannot be empty.",
+      }))
+    }
+
+    if (totalDealDays == 0) {
+      setEnteredFormError((prevVal) => ({
+        ...prevVal,
+        ["days"]: "Deal days need to be selected.",
+      }))
+    }
+
+    if (enteredFormData.deal.from.length == 0) {
+      setEnteredFormError((prevVal) => ({
+        ...prevVal,
+        ["from"]: "Starting time needs to be selected",
+      }))
+    }
+    if (enteredFormData.deal.to.length == 0) {
+      setEnteredFormError((prevVal) => ({
+        ...prevVal,
+        ["to"]: "Ending time needs to be selected",
+      }))
+    }
+
+    const fromTime: DateTime | string = enteredFormData.deal.from
+    const toTime: DateTime | string = enteredFormData.deal.to
+    if (
+      enteredFormData.deal.from.length != 0 &&
+      enteredFormData.deal.to.length != 0 &&
+      toTime <= fromTime
+    ) {
+      setEnteredFormError((prevVal) => ({
+        ...prevVal,
+        ["to"]: "Ending time needs to be after the starting time",
+      }))
+    }
+
+    if (
+      enteredFormError.restaurantName.length == 0 &&
+      enteredFormError.days.length == 0 &&
+      enteredFormError.from.length == 0 &&
+      enteredFormError.to.length == 0
+    ) {
+      console.log("PLESE Proceed with submittion")
+      //send data to backend
+      //pop up a notification and disapear it
+      addPlaceMutation.mutate(enteredFormData)
+      // setOverlay(true)
+      // const boston = { lat: 42.36, lng: -71.1 }
+      // setMapPosition(boston)
+    }
   }
 
   const {
@@ -168,6 +243,7 @@ export const NewPlaceForm = ({
       <form onSubmit={handleSubmit}>
         <div {...stylex.props(newPlaceFormStyles.inputDiv)}>
           <label {...stylex.props(newPlaceFormStyles.label)}>Name</label>
+
           <input
             {...stylex.props(newPlaceFormStyles.input)}
             value={
@@ -182,11 +258,18 @@ export const NewPlaceForm = ({
               handleInputChange("", "restaurantName")
 
               handleInputChange("", "address")
+              setEnteredFormError((prevVal) => ({
+                ...prevVal,
+                ["restaurantName"]: "",
+              }))
             }}
             disabled={!ready}
             placeholder="Restaurant Name"
             autoComplete="off"
           ></input>
+          {enteredFormError.restaurantName.length > 0 && (
+            <ErrorText text={enteredFormError.restaurantName} />
+          )}
 
           {status === "OK" && data.length > 0 && (
             <SuggestionDropDown
@@ -217,7 +300,15 @@ export const NewPlaceForm = ({
 
         <div {...stylex.props(newPlaceFormStyles.inputDiv)}>
           <label {...stylex.props(newPlaceFormStyles.label)}>Dollar Deal</label>
-          <div {...stylex.props(newPlaceFormStyles.dealdays)}>
+          <div
+            {...stylex.props(newPlaceFormStyles.dealdays)}
+            onClick={() => {
+              setEnteredFormError((prevVal) => ({
+                ...prevVal,
+                ["days"]: "",
+              }))
+            }}
+          >
             <div
               {...stylex.props(
                 newPlaceFormStyles.day,
@@ -229,6 +320,7 @@ export const NewPlaceForm = ({
             >
               Mon
             </div>
+
             <div
               {...stylex.props(
                 newPlaceFormStyles.day,
@@ -296,7 +388,9 @@ export const NewPlaceForm = ({
               Sun
             </div>
           </div>
-
+          {enteredFormError.days.length > 0 && (
+            <ErrorText text={enteredFormError.days} />
+          )}
           <div {...stylex.props(newPlaceFormStyles.dealdays)}>
             <div {...stylex.props(newPlaceFormStyles.label)}>
               <label>From</label>
@@ -311,7 +405,7 @@ export const NewPlaceForm = ({
                     console.log("what is time select", timeSelect)
                     setTimeSelect("from")
                   }}
-                  value={dealTimes.from}
+                  value={enteredFormData.deal.from}
                   type="text"
                   placeholder="5:00pm"
                   onChange={() => {
@@ -323,16 +417,19 @@ export const NewPlaceForm = ({
                     data={timeOptions}
                     onSelectFn={(event) => {
                       handleInputChange(event, "from")
-
-                      console.log("select: ", event)
-                      setDealTimes((prevVal) => ({
+                      setEnteredFormError((prevVal) => ({
                         ...prevVal,
-                        ["from"]: event,
+                        ["from"]: "",
                       }))
+
                       setTimeSelect("")
                     }}
                     type="time"
                   />
+                )}
+
+                {enteredFormError.from.length > 0 && (
+                  <ErrorText text={enteredFormError.from} />
                 )}
               </div>
             </div>
@@ -354,7 +451,7 @@ export const NewPlaceForm = ({
                     console.log("what is time select", timeSelect)
                     setTimeSelect("to")
                   }}
-                  value={dealTimes.to}
+                  value={enteredFormData.deal.to}
                   type="text"
                   placeholder="5:00pm"
                   onChange={() => {
@@ -367,15 +464,17 @@ export const NewPlaceForm = ({
                     onSelectFn={(event) => {
                       handleInputChange(event, "to")
 
-                      console.log("select: ", event)
-                      setDealTimes((prevVal) => ({
+                      setEnteredFormError((prevVal) => ({
                         ...prevVal,
-                        ["to"]: event,
+                        ["to"]: "",
                       }))
                       setTimeSelect("")
                     }}
                     type="time"
                   />
+                )}
+                {enteredFormError.to.length > 0 && (
+                  <ErrorText text={enteredFormError.to} />
                 )}
               </div>
             </div>
@@ -488,6 +587,8 @@ const newPlaceFormStyles = stylex.create({
   },
   day: {
     width: "3rem",
+    fontSize: "1.1rem",
+
     padding: ".5rem",
     margin: ".1rem",
     height: "1.5rem",
@@ -500,7 +601,7 @@ const newPlaceFormStyles = stylex.create({
   selectTime: {
     width: "7rem",
     height: "1.5rem",
-    fontSize: "1rem",
+    fontSize: "1.1rem",
     borderRadius: ".3rem",
     // padding: ".2rem",
     // fontWeight: 300,

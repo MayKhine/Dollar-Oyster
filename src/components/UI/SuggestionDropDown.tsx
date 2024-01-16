@@ -54,6 +54,6 @@ const suggestionDropDownStyles = stylex.create({
     padding: ".2rem",
   },
   dynamicOptions: (type) => ({
-    width: type == "time" ? "7rem" : "100%",
+    width: type == "time" ? "8rem" : "100%",
   }),
 })

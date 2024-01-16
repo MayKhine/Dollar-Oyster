@@ -24,19 +24,16 @@ type NewPlaceFormProps = {
 export type enterdFormDataType = {
   restaurantName: string
   restaurantLink: string
-  googleMapLink: string
+  // googleMapLink: string
   address: string
-  note: string
+  notes: string
   deal: dollarDealType
 }
 
 type dollarDealType = {
-  // days: Array<string>
   days: Array<number>
   from: string
   to: string
-  // from?: DateTime
-  // to?: DateTime
 }
 export const NewPlaceForm = ({
   cancelFn,
@@ -49,10 +46,9 @@ export const NewPlaceForm = ({
   const [enteredFormData, setEnteredFormData] = useState<enterdFormDataType>({
     restaurantName: "",
     restaurantLink: "",
-    googleMapLink: "",
+    // googleMapLink: "",
     address: "",
-    note: "",
-    // deal: { days: ["", "", "", "", "", "", ""] },
+    notes: "",
     deal: { days: [0, 0, 0, 0, 0, 0, 0], from: "", to: "" },
   })
 
@@ -218,7 +214,15 @@ export const NewPlaceForm = ({
 
         <div {...stylex.props(newPlaceFormStyles.inputDiv)}>
           <label {...stylex.props(newPlaceFormStyles.label)}>Dollar Deal</label>
-          <div {...stylex.props(newPlaceFormStyles.deals)}>
+          <div {...stylex.props(newPlaceFormStyles.dealdays)}>
+            {/* <div
+              {...stylex.props(
+                newPlaceFormStyles.label,
+                newPlaceFormStyles.dayLabel
+              )}
+            >
+              Days
+            </div> */}
             <div
               {...stylex.props(
                 newPlaceFormStyles.day,
@@ -297,75 +301,102 @@ export const NewPlaceForm = ({
               Sun
             </div>
           </div>
-          <div {...stylex.props(newPlaceFormStyles.deals)}>
-            <div>
+
+          <div {...stylex.props(newPlaceFormStyles.dealdays)}>
+            <div {...stylex.props(newPlaceFormStyles.label)}>
               <label>From</label>
 
-              <input
-                {...stylex.props(newPlaceFormStyles.select)}
-                onClick={() => {
-                  console.log("what is time select", timeSelect)
-                  setTimeSelect("from")
-                }}
-                value={dealTimes.from}
-                type="text"
-                placeholder="5:00pm"
-                onChange={() => {
-                  console.log("On Change")
-                }}
-              ></input>
-              {timeSelect == "from" && (
-                <SuggestionDropDown
-                  data={timeOptions}
-                  onSelectFn={(event) => {
-                    handleInputChange(event, "from")
-
-                    console.log("select: ", event)
-                    setDealTimes((prevVal) => ({
-                      ...prevVal,
-                      ["from"]: event,
-                    }))
-                    setTimeSelect("")
+              <div>
+                <input
+                  {...stylex.props(
+                    newPlaceFormStyles.input,
+                    newPlaceFormStyles.selectTime
+                  )}
+                  onClick={() => {
+                    console.log("what is time select", timeSelect)
+                    setTimeSelect("from")
                   }}
-                  type="time"
-                />
-              )}
+                  value={dealTimes.from}
+                  type="text"
+                  placeholder="5:00pm"
+                  onChange={() => {
+                    console.log("On Change")
+                  }}
+                ></input>
+                {timeSelect == "from" && (
+                  <SuggestionDropDown
+                    data={timeOptions}
+                    onSelectFn={(event) => {
+                      handleInputChange(event, "from")
+
+                      console.log("select: ", event)
+                      setDealTimes((prevVal) => ({
+                        ...prevVal,
+                        ["from"]: event,
+                      }))
+                      setTimeSelect("")
+                    }}
+                    type="time"
+                  />
+                )}
+              </div>
             </div>
-            <div>
+            <div
+              {...stylex.props(
+                newPlaceFormStyles.label,
+                newPlaceFormStyles.timeLabel
+              )}
+            >
               <label>To</label>
 
-              <input
-                {...stylex.props(newPlaceFormStyles.select)}
-                onClick={() => {
-                  console.log("what is time select", timeSelect)
-                  setTimeSelect("to")
-                }}
-                value={dealTimes.to}
-                type="text"
-                placeholder="5:00pm"
-                onChange={() => {
-                  console.log("On Change")
-                }}
-              ></input>
-              {timeSelect == "to" && (
-                <SuggestionDropDown
-                  data={timeOptions}
-                  onSelectFn={(event) => {
-                    handleInputChange(event, "to")
-
-                    console.log("select: ", event)
-                    setDealTimes((prevVal) => ({
-                      ...prevVal,
-                      ["to"]: event,
-                    }))
-                    setTimeSelect("")
+              <div>
+                <input
+                  {...stylex.props(
+                    newPlaceFormStyles.input,
+                    newPlaceFormStyles.selectTime
+                  )}
+                  onClick={() => {
+                    console.log("what is time select", timeSelect)
+                    setTimeSelect("to")
                   }}
-                  type="time"
-                />
-              )}
+                  value={dealTimes.to}
+                  type="text"
+                  placeholder="5:00pm"
+                  onChange={() => {
+                    console.log("On Change")
+                  }}
+                ></input>
+                {timeSelect == "to" && (
+                  <SuggestionDropDown
+                    data={timeOptions}
+                    onSelectFn={(event) => {
+                      handleInputChange(event, "to")
+
+                      console.log("select: ", event)
+                      setDealTimes((prevVal) => ({
+                        ...prevVal,
+                        ["to"]: event,
+                      }))
+                      setTimeSelect("")
+                    }}
+                    type="time"
+                  />
+                )}
+              </div>
             </div>
           </div>
         </div>
+
+        <FormInput
+          label="Notes"
+          type="text"
+          value={enteredFormData.notes}
+          handleInputChangeFn={(event) => {
+            handleInputChange(event.target.value, "notes")
+          }}
+          id="notes"
+          placeholder="This is my new fav place to go for oyster and wine ..."
+        />
       </form>
       <div {...stylex.props(newPlaceFormStyles.buttonsDiv)}>
         <CustomButton
@@ -455,20 +486,37 @@ const newPlaceFormStyles = stylex.create({
     backgroundColor: "#DFDFDF",
     borderRadius: ".5rem",
   },
-  deals: { display: "flex" },
-
-  day: {
-    backgroundColor: colors.offwhite,
+  dealdays: { display: "flex", marginTop: ".5rem" },
+  dayLabel: {
     width: "3rem",
-    margin: ".1rem",
+    marginLeft: "3.1rem",
   },
-  select: {
+  day: {
+    width: "4rem",
+    padding: ".5rem",
+    margin: ".1rem",
+    height: "1.5rem",
+    display: "flex",
+    justifyContent: "center",
+    marginRight: ".7rem",
+    borderRadius: ".3rem",
+  },
+  timeLabel: { marginLeft: "3rem" },
+  selectTime: {
     width: "7rem",
     height: "1.5rem",
     fontSize: "1rem",
-    borderRadius: ".2rem",
+    borderRadius: ".3rem",
+    // padding: ".2rem",
+    // fontWeight: 300,
+    // fontSize: "1.1rem",
+    // marginTop: ".5rem",
+    padding: ".5rem",
   },
   dynamicBg: (selected) => ({
-    backgroundColor: selected == 0 ? "lightgray" : "gray",
+    backgroundColor: selected == 0 ? colors.offwhite : colors.darkBlue,
+    color: selected == 0 ? colors.darkBlue : colors.offwhite,
+
+    // border: selected == 0 ? "1px white solid" : "1px gray solid",
   }),
 })

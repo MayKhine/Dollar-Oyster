@@ -16,7 +16,6 @@ import { SuggestionDropDown } from "../UI/SuggestionDropDown"
 import { positionType } from "../map/MapMarker"
 import { ErrorText } from "../UI/ErrorText"
 import { addPlace } from "../../api/databaseFunc"
-import { start } from "repl"
 // import { OverlayModal } from "../UI/OverlayModal"
 
 type setAddNewPlaceSuccessProps = {
@@ -294,19 +293,15 @@ export const NewPlaceForm = ({
     while (current <= afterMidNight) {
       timeOptions.push(current.toFormat("hh:mm a"))
 
-      current = current.plus({ minutes: 15 })
+      current = current.plus({ minutes: 30 })
     }
 
     return timeOptions
   }
 
   const timeOptions = generateTimeOptions()
-  const newTimeOptions = timeOptions.slice(5)
-
-  console.log("timeOptions: ", timeOptions)
-  console.log("newTimeOptions: ", newTimeOptions)
-
   const restaurantData = data.map((e) => e.description)
+
   return (
     <div {...stylex.props(newPlaceFormStyles.base)}>
       {/* {overlay && <OverlayModal title="over lay title" text="overlay text" />} */}

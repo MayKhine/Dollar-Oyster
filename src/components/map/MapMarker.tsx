@@ -10,17 +10,16 @@ export type MapMarkerProps = {
 
 export type restaurantDataType = {
   id: string
+  date: string
   name: string
+  link: string
   lat: number
   lng: number
-  position: {
-    lat: number
-    lng: number
-  }
   address: string
   notes: string
-  googleMapLink: string
-  googleMapLink2?: string
+  days: Array<number>
+  from: string
+  to: string
 }
 
 export type positionType = {

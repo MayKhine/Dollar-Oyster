@@ -30,7 +30,7 @@ export const RestaurantListDiv = ({
     setAddNewPlace(!addNewPlace)
   }
 
-  const sortTheList = (a, b) => {
+  const sortTheList = (a: restaurantDataType, b: restaurantDataType) => {
     const dateA = DateTime.fromISO(a.date)
     const dateB = DateTime.fromISO(b.date)
 
@@ -143,6 +143,7 @@ const restaurantListDivStyles = stylex.create({
     marginTop: "1rem",
   },
   addNewLocationText: {
+    marginTop: "1rem",
     paddingLeft: "2rem",
     paddingRight: "2rem",
     color: colors.darkBlue,

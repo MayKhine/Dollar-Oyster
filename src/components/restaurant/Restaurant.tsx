@@ -9,7 +9,10 @@ type RestaurantProps = {
 
 export const Restaurant = ({ data }: RestaurantProps) => {
   return (
-    <div {...stylex.props(restaurantStyles.base)}>
+    <div
+      {...stylex.props(restaurantStyles.base)}
+      onMouseOver={() => console.log("On Mouse Over: ", data.name)}
+    >
       <div {...stylex.props(restaurantStyles.nameAndSvg)}>
         <div {...stylex.props(restaurantStyles.name)}>{data.name}</div>
         <div {...stylex.props(restaurantStyles.heartDiv)}>
@@ -37,6 +40,10 @@ const restaurantStyles = stylex.create({
     paddingBottom: "1rem",
     margin: "1rem",
     color: colors.darkBlue,
+    backgroundColor: {
+      default: colors.green,
+      ":hover": colors.offwhite,
+    },
   },
   name: {
     fontSize: "1.2rem",

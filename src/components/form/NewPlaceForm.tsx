@@ -26,12 +26,17 @@ type NewPlaceFormProps = {
 }
 
 export type enterdFormDataType = {
-  restaurantName: string
-  restaurantLink: string
+  name: string
+  link: string
+  lat: string
+  lng: string
   // googleMapLink: string
   address: string
   notes: string
-  deal: dollarDealType
+  // deal: dollarDealType
+  days: Array<number>
+  from: string
+  to: string
 }
 
 type dollarDealType = {
@@ -55,51 +60,64 @@ export const NewPlaceForm = ({
 
   const [timeSelect, setTimeSelect] = useState("")
   const [enteredFormError, setEnteredFormError] = useState({
-    restaurantName: "",
+    name: "",
     days: "",
     from: "",
     to: "",
   })
   // const [overlay, setOverlay] = useState(false)
   const [enteredFormData, setEnteredFormData] = useState<enterdFormDataType>({
-    restaurantName: "",
-    restaurantLink: "",
+    name: "",
+    link: "",
+    lat: "",
+    lng: "",
     // googleMapLink: "",
     address: "",
     notes: "",
-    deal: { days: [0, 0, 0, 0, 0, 0, 0], from: "", to: "" },
+    days: [0, 0, 0, 0, 0, 0, 0],
+    from: "",
+    to: "",
+
+    // deal: { days: [0, 0, 0, 0, 0, 0, 0], from: "", to: "" },
   })
 
   const handleInputChange = (value: string, id: string, index?: number) => {
-    console.log("Handle Input Change value: ", value, "id: ", id)
+    // console.log("Handle Input Change value: ", value, "id: ", id)
 
     // deal: days
     if (id == "days" && index != undefined) {
-      const currentDeal = enteredFormData["deal"]
+      // const currentDeal = enteredFormData["deal"]
+      const currentDays = enteredFormData["days"]
 
-      if (currentDeal["days"][index] == 1) {
-        currentDeal["days"][index] = 0
+      if (currentDays[index] == 1) {
+        currentDays[index] = 0
         setEnteredFormData((prevData) => ({
           ...prevData,
-          ["deal"]: currentDeal,
+          ["days"]: currentDays,
         }))
       } else {
         // currentDeal["days"][index] = value
-        currentDeal["days"][index] = 1
+        // enteredFormData["days"][index] = 1
+        // const currentDays =  enteredFormData["days"]
+        currentDays[index] = 1
         setEnteredFormData((prevData) => ({
           ...prevData,
-          ["deal"]: currentDeal,
+          ["days"]: currentDays,
         }))
       }
-    } else if ((id == "from" || id == "to") && value != undefined) {
-      const currentDeal = enteredFormData["deal"]
-      currentDeal[id] = value
+    }
 
-      setEnteredFormData((prevData) => ({
-        ...prevData,
-        ["deal"]: currentDeal,
-      }))
-    } else {
+    // else if ((id == "from" || id == "to") && value != undefined) {
+    //   // const currentDeal = enteredFormData["deal"]
+    //   // currentDeal[id] = value
+    //   const currentData = enteredFormData[id]
+
+    //   setEnteredFormData((prevData) => ({
+    //     ...prevData,
+    //     [id]: value
+    //   }))
+    // }
+    else {
       setEnteredFormData((prevData) => ({
         ...prevData,
         [id]: value,
@@ -110,22 +128,20 @@ export const NewPlaceForm = ({
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
 
-    console.log("Handle Form Submit: what is in form data", enteredFormData)
-
     //check name is not empty and address is not empty
     // days are not empty and date is not empty
     let totalDealDays = 0
-    enteredFormData.deal.days.map((day) => {
+    enteredFormData.days.map((day) => {
       totalDealDays += day
     })
 
     if (
-      enteredFormData.restaurantName.length == 0 ||
+      enteredFormData.name.length == 0 ||
       enteredFormData.address.length == 0
     ) {
       setEnteredFormError((prevVal) => ({
         ...prevVal,
-        ["restaurantName"]: "Restaurant name cannot be empty.",
+        ["name"]: "Restaurant name cannot be empty.",
       }))
     }
 
@@ -136,24 +152,24 @@ export const NewPlaceForm = ({
       }))
     }
 
-    if (enteredFormData.deal.from.length == 0) {
+    if (enteredFormData.from.length == 0) {
       setEnteredFormError((prevVal) => ({
         ...prevVal,
         ["from"]: "Starting time needs to be selected",
       }))
     }
-    if (enteredFormData.deal.to.length == 0) {
+    if (enteredFormData.to.length == 0) {
       setEnteredFormError((prevVal) => ({
         ...prevVal,
         ["to"]: "Ending time needs to be selected",
       }))
     }
 
-    const fromTime: DateTime | string = enteredFormData.deal.from
-    const toTime: DateTime | string = enteredFormData.deal.to
+    const fromTime: DateTime | string = enteredFormData.from
+    const toTime: DateTime | string = enteredFormData.to
     if (
-      enteredFormData.deal.from.length != 0 &&
-      enteredFormData.deal.to.length != 0 &&
+      enteredFormData.from.length != 0 &&
+      enteredFormData.to.length != 0 &&
       toTime <= fromTime
     ) {
       setEnteredFormError((prevVal) => ({
@@ -163,12 +179,19 @@ export const NewPlaceForm = ({
     }
 
     if (
-      enteredFormError.restaurantName.length == 0 &&
+      enteredFormError.name.length == 0 &&
       enteredFormError.days.length == 0 &&
       enteredFormError.from.length == 0 &&
-      enteredFormError.to.length == 0
+      enteredFormError.to.length == 0 &&
+      //check name, total deal days, from and to
+      enteredFormData.name.length > 0 &&
+      totalDealDays > 0 &&
+      enteredFormData.from.length > 0 &&
+      enteredFormData.to.length > 0 &&
+      fromTime < toTime
     ) {
-      console.log("PLESE Proceed with submittion")
+      console.log("entered form error: ", enteredFormError)
+      console.log("PLESE Proceed with submittion", enteredFormData)
       //send data to backend
       //pop up a notification and disapear it
       addPlaceMutation.mutate(enteredFormData)
@@ -187,17 +210,20 @@ export const NewPlaceForm = ({
   } = usePlacesAutocomplete()
 
   const handleSelectRestaurant = async (value: string) => {
-    const restaurantName = value.split(",")[0]
+    const name = value.split(",")[0]
 
-    setValue(restaurantName, false)
+    setValue(name, false)
     clearSuggestions()
     const results = await getGeocode({ address: value })
 
     //change the address when you pick the restaurant
-    handleInputChange(restaurantName, "restaurantName")
+    handleInputChange(name, "name")
     handleInputChange(results[0].formatted_address, "address")
 
     const { lat, lng } = await getLatLng(results[0])
+    handleInputChange(lat, "lat")
+    handleInputChange(lng, "lng")
+
     setMapPosition({ lat: lat, lng: lng })
     setZoom(20)
   }
@@ -247,28 +273,28 @@ export const NewPlaceForm = ({
           <input
             {...stylex.props(newPlaceFormStyles.input)}
             value={
-              // enteredFormData.restaurantName.length == 0
+              // enteredFormData.name.length == 0
               //   ? value
-              //   : enteredFormData.restaurantName
+              //   : enteredFormData.name
               value
             }
             id="name"
             onChange={(event) => {
               setValue(event.target.value)
-              handleInputChange("", "restaurantName")
+              handleInputChange("", "name")
 
               handleInputChange("", "address")
               setEnteredFormError((prevVal) => ({
                 ...prevVal,
-                ["restaurantName"]: "",
+                ["name"]: "",
               }))
             }}
             disabled={!ready}
             placeholder="Restaurant Name"
             autoComplete="off"
           ></input>
-          {enteredFormError.restaurantName.length > 0 && (
-            <ErrorText text={enteredFormError.restaurantName} />
+          {enteredFormError.name.length > 0 && (
+            <ErrorText text={enteredFormError.name} />
           )}
 
           {status === "OK" && data.length > 0 && (
@@ -290,11 +316,11 @@ export const NewPlaceForm = ({
         <FormInput
           label="Restaurant Link"
           type="text"
-          value={enteredFormData.restaurantLink}
+          value={enteredFormData.link}
           handleInputChangeFn={(event) => {
-            handleInputChange(event.target.value, "restaurantLink")
+            handleInputChange(event.target.value, "link")
           }}
-          id="restaurantLink"
+          id="link"
           placeholder="www.restaurant.com ...."
         />
 
@@ -312,7 +338,7 @@ export const NewPlaceForm = ({
             <div
               {...stylex.props(
                 newPlaceFormStyles.day,
-                newPlaceFormStyles.dynamicBg(enteredFormData["deal"]["days"][0])
+                newPlaceFormStyles.dynamicBg(enteredFormData["days"][0])
               )}
               onClick={() => {
                 handleInputChange("deal", "days", 0)
@@ -324,7 +350,7 @@ export const NewPlaceForm = ({
             <div
               {...stylex.props(
                 newPlaceFormStyles.day,
-                newPlaceFormStyles.dynamicBg(enteredFormData["deal"]["days"][1])
+                newPlaceFormStyles.dynamicBg(enteredFormData["days"][1])
               )}
               onClick={() => {
                 handleInputChange("deal", "days", 1)
@@ -335,7 +361,7 @@ export const NewPlaceForm = ({
             <div
               {...stylex.props(
                 newPlaceFormStyles.day,
-                newPlaceFormStyles.dynamicBg(enteredFormData["deal"]["days"][2])
+                newPlaceFormStyles.dynamicBg(enteredFormData["days"][2])
               )}
               onClick={() => {
                 handleInputChange("deal", "days", 2)
@@ -346,7 +372,7 @@ export const NewPlaceForm = ({
             <div
               {...stylex.props(
                 newPlaceFormStyles.day,
-                newPlaceFormStyles.dynamicBg(enteredFormData["deal"]["days"][3])
+                newPlaceFormStyles.dynamicBg(enteredFormData["days"][3])
               )}
               onClick={() => {
                 handleInputChange("deal", "days", 3)
@@ -357,7 +383,7 @@ export const NewPlaceForm = ({
             <div
               {...stylex.props(
                 newPlaceFormStyles.day,
-                newPlaceFormStyles.dynamicBg(enteredFormData["deal"]["days"][4])
+                newPlaceFormStyles.dynamicBg(enteredFormData["days"][4])
               )}
               onClick={() => {
                 handleInputChange("deal", "days", 4)
@@ -368,7 +394,7 @@ export const NewPlaceForm = ({
             <div
               {...stylex.props(
                 newPlaceFormStyles.day,
-                newPlaceFormStyles.dynamicBg(enteredFormData["deal"]["days"][5])
+                newPlaceFormStyles.dynamicBg(enteredFormData["days"][5])
               )}
               onClick={() => {
                 handleInputChange("deal", "days", 5)
@@ -379,7 +405,7 @@ export const NewPlaceForm = ({
             <div
               {...stylex.props(
                 newPlaceFormStyles.day,
-                newPlaceFormStyles.dynamicBg(enteredFormData["deal"]["days"][6])
+                newPlaceFormStyles.dynamicBg(enteredFormData["days"][6])
               )}
               onClick={() => {
                 handleInputChange("deal", "days", 6)
@@ -405,7 +431,7 @@ export const NewPlaceForm = ({
                     console.log("what is time select", timeSelect)
                     setTimeSelect("from")
                   }}
-                  value={enteredFormData.deal.from}
+                  value={enteredFormData.from}
                   type="text"
                   placeholder="5:00pm"
                   onChange={() => {
@@ -451,7 +477,7 @@ export const NewPlaceForm = ({
                     console.log("what is time select", timeSelect)
                     setTimeSelect("to")
                   }}
-                  value={enteredFormData.deal.to}
+                  value={enteredFormData.to}
                   type="text"
                   placeholder="5:00pm"
                   onChange={() => {

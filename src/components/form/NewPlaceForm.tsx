@@ -15,7 +15,7 @@ import { CustomText } from "../UI/CustomText"
 import { SuggestionDropDown } from "../UI/SuggestionDropDown"
 import { positionType } from "../map/MapMarker"
 import { ErrorText } from "../UI/ErrorText"
-import { addPlace, checkPlace } from "../../api/databaseFunc"
+import { addPlace } from "../../api/databaseFunc"
 // import { OverlayModal } from "../UI/OverlayModal"
 
 type NewPlaceFormProps = {
@@ -23,6 +23,7 @@ type NewPlaceFormProps = {
   mapPosition: positionType
   setMapPosition: (position: positionType) => void
   setZoom: (zoom: number) => void
+  setAddNewPlaceSuccess: ({ success: boolean, name: string }) => void
 }
 
 export type enterdFormDataType = {
@@ -30,10 +31,8 @@ export type enterdFormDataType = {
   link: string
   lat: number
   lng: number
-  // googleMapLink: string
   address: string
   notes: string
-  // deal: dollarDealType
   days: Array<number>
   from: string
   to: string
@@ -49,22 +48,36 @@ export const NewPlaceForm = ({
   cancelFn,
   setMapPosition,
   setZoom,
+  setAddNewPlaceSuccess,
 }: NewPlaceFormProps) => {
   const queryClient = useQueryClient()
 
   const addPlaceMutation = useMutation({
     mutationFn: addPlace,
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["places"] })
+      console.log("What is data: ", data)
+      if (data.success === false) {
+        setEnteredFormError((prevVal) => ({
+          ...prevVal,
+          ["name"]: "Restaurant already exists in the list.",
+        }))
+      } else {
+        setAddNewPlaceSuccess({ success: true, name: enteredFormData.name })
+        cancelFn()
+        const boston = { lat: 42.36, lng: -71.1 }
+        setZoom(12)
+        setMapPosition(boston)
+      }
     },
   })
 
-  const checkIfPlaceExists = useMutation({
-    mutationFn: checkPlace,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["places"] })
-    },
-  })
+  // const checkIfPlaceExists = useMutation({
+  //   mutationFn: checkPlace,
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({ queryKey: ["places"] })
+  //   },
+  // })
 
   const [timeSelect, setTimeSelect] = useState("")
   const [enteredFormError, setEnteredFormError] = useState({
@@ -104,28 +117,13 @@ export const NewPlaceForm = ({
           ["days"]: currentDays,
         }))
       } else {
-        // currentDeal["days"][index] = value
-        // enteredFormData["days"][index] = 1
-        // const currentDays =  enteredFormData["days"]
         currentDays[index] = 1
         setEnteredFormData((prevData) => ({
           ...prevData,
           ["days"]: currentDays,
         }))
       }
-    }
-
-    // else if ((id == "from" || id == "to") && value != undefined) {
-    //   // const currentDeal = enteredFormData["deal"]
-    //   // currentDeal[id] = value
-    //   const currentData = enteredFormData[id]
-
-    //   setEnteredFormData((prevData) => ({
-    //     ...prevData,
-    //     [id]: value
-    //   }))
-    // }
-    else {
+    } else {
       setEnteredFormData((prevData) => ({
         ...prevData,
         [id]: value,
@@ -153,77 +151,67 @@ export const NewPlaceForm = ({
       }))
     }
 
-    checkIfPlaceExists.mutate({
-      name: enteredFormData.name,
-      address: enteredFormData.address,
-    })
+    // checkIfPlaceExists.mutate({
+    //   name: enteredFormData.name,
+    //   address: enteredFormData.address,
+    // })
 
-    if (checkIfPlaceExists.isSuccess) {
-      if (checkIfPlaceExists.data.success == true) {
-        setEnteredFormError((prevVal) => ({
-          ...prevVal,
-          ["name"]: "Restaurant already exists in the list.",
-        }))
-      } else {
-        //check deal days are selected
-        if (totalDealDays == 0) {
-          setEnteredFormError((prevVal) => ({
-            ...prevVal,
-            ["days"]: "Deal days need to be selected.",
-          }))
-        }
+    //check deal days are selected
+    if (totalDealDays == 0) {
+      setEnteredFormError((prevVal) => ({
+        ...prevVal,
+        ["days"]: "Deal days need to be selected.",
+      }))
+    }
 
-        //check tiimes are selected
-        if (enteredFormData.from.length == 0) {
-          setEnteredFormError((prevVal) => ({
-            ...prevVal,
-            ["from"]: "Starting time needs to be selected",
-          }))
-        }
+    //check tiimes are selected
+    if (enteredFormData.from.length == 0) {
+      setEnteredFormError((prevVal) => ({
+        ...prevVal,
+        ["from"]: "Starting time needs to be selected",
+      }))
+    }
 
-        if (enteredFormData.to.length == 0) {
-          setEnteredFormError((prevVal) => ({
-            ...prevVal,
-            ["to"]: "Ending time needs to be selected",
-          }))
-        }
+    if (enteredFormData.to.length == 0) {
+      setEnteredFormError((prevVal) => ({
+        ...prevVal,
+        ["to"]: "Ending time needs to be selected",
+      }))
+    }
 
-        const fromTime: DateTime | string = enteredFormData.from
-        const toTime: DateTime | string = enteredFormData.to
-        if (
-          enteredFormData.from.length != 0 &&
-          enteredFormData.to.length != 0 &&
-          toTime <= fromTime
-        ) {
-          setEnteredFormError((prevVal) => ({
-            ...prevVal,
-            ["to"]: "Ending time needs to be after the starting time",
-          }))
-        }
+    const fromTime: DateTime | string = enteredFormData.from
+    const toTime: DateTime | string = enteredFormData.to
+    if (
+      enteredFormData.from.length != 0 &&
+      enteredFormData.to.length != 0 &&
+      toTime <= fromTime
+    ) {
+      setEnteredFormError((prevVal) => ({
+        ...prevVal,
+        ["to"]: "Ending time needs to be after the starting time",
+      }))
+    }
 
-        //if there's not error and eveyrhting is good
-        if (
-          enteredFormError.name.length == 0 &&
-          enteredFormError.days.length == 0 &&
-          enteredFormError.from.length == 0 &&
-          enteredFormError.to.length == 0 &&
-          //check name, total deal days, from and to
-          enteredFormData.name.length > 0 &&
-          totalDealDays > 0 &&
-          enteredFormData.from.length > 0 &&
-          enteredFormData.to.length > 0 &&
-          fromTime < toTime
-        ) {
-          console.log("PROCEED with data submission", enteredFormData)
-          //send data to backend
-          //pop up a notification and disapear it
-          addPlaceMutation.mutate(enteredFormData)
-          cancelFn()
-          // setOverlay(true)
-          // const boston = { lat: 42.36, lng: -71.1 }
-          // setMapPosition(boston)
-        }
-      }
+    //if there's not error and eveyrhting is good
+    if (
+      enteredFormError.name.length == 0 &&
+      enteredFormError.days.length == 0 &&
+      enteredFormError.from.length == 0 &&
+      enteredFormError.to.length == 0 &&
+      //check name, total deal days, from and to
+      enteredFormData.name.length > 0 &&
+      totalDealDays > 0 &&
+      enteredFormData.from.length > 0 &&
+      enteredFormData.to.length > 0 &&
+      fromTime < toTime
+    ) {
+      console.log("PROCEED with data submission", enteredFormData)
+      //send data to backend
+      //pop up a notification and disapear it
+      addPlaceMutation.mutate(enteredFormData)
+      // console.log("Mutation info ", addPlaceMutation)
+
+      // setOverlay(true)
     }
   }
 

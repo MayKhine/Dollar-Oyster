@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { useQuery } from "@tanstack/react-query"
-
+import { DateTime } from "luxon"
 import { colors } from "../../assets/styles/tokens.stylex"
 import { Restaurant } from "./Restaurant"
 import { getPlaces } from "../../api/databaseFunc"
@@ -22,9 +22,28 @@ export const RestaurantListDiv = ({
 }: RestaurantListDivProps) => {
   const getPlacesQuery = useQuery({ queryKey: ["places"], queryFn: getPlaces })
   const [addNewPlace, setAddNewPlace] = useState(false)
+  const [addNewPlaceSuccess, setAddNewPlaceSuccess] = useState({
+    success: false,
+    name: "",
+  })
   const cancelHandler = () => {
     setAddNewPlace(!addNewPlace)
   }
+
+  const sortTheList = (a, b) => {
+    const dateA = DateTime.fromISO(a.date)
+    const dateB = DateTime.fromISO(b.date)
+
+    return dateB.toMillis() - dateA.toMillis()
+    // return dateA.toMillis() - dateB.toMillis()
+  }
+
+  if (getPlacesQuery.isSuccess && getPlacesQuery.data.data?.length) {
+    const sortedList = getPlacesQuery.data.data?.sort(sortTheList)
+    // console.log("NOT SORTED list: ", getPlacesQuery.data.data)
+    // console.log("Sorted list: ", sortedList)
+  }
+
   return (
     <div {...stylex.props(restaurantListDivStyles.scrollSide)}>
       <div {...stylex.props(restaurantListDivStyles.textDiv)}>
@@ -46,7 +65,7 @@ export const RestaurantListDiv = ({
       </div>
       <div>
         {!addNewPlace && (
-          <div {...stylex.props(restaurantListDivStyles.centerDiv)}>
+          <div {...stylex.props(restaurantListDivStyles.addNewLocationDiv)}>
             <CustomButton
               text={"Add a new location"}
               bgColor={colors.darkBlue}
@@ -55,12 +74,21 @@ export const RestaurantListDiv = ({
               padding=".5rem"
               onClickFn={() => {
                 setAddNewPlace(!addNewPlace)
+                setAddNewPlaceSuccess({ success: false, name: "" })
               }}
             />
           </div>
         )}
+        {!addNewPlace && addNewPlaceSuccess.success && (
+          <div {...stylex.props(restaurantListDivStyles.addNewLocationText)}>
+            Thank you for adding {addNewPlaceSuccess.name}, a new Dollar Oyster
+            place!
+          </div>
+        )}
+
         {addNewPlace && (
           <NewPlaceForm
+            setAddNewPlaceSuccess={setAddNewPlaceSuccess}
             cancelFn={cancelHandler}
             mapPosition={mapPosition}
             setMapPosition={setMapPosition}
@@ -78,11 +106,11 @@ export const RestaurantListDiv = ({
 
       {getPlacesQuery.isSuccess && getPlacesQuery.data.data?.length > 0 && (
         <div {...stylex.props(restaurantListDivStyles.listDiv)}>
-          {getPlacesQuery.data.data.map(
-            (place: restaurantDataType, index: number) => {
+          {getPlacesQuery.data.data
+            ?.sort(sortTheList)
+            .map((place: restaurantDataType, index: number) => {
               return <Restaurant data={place} key={index} />
-            }
-          )}
+            })}
         </div>
       )}
     </div>
@@ -107,8 +135,17 @@ const restaurantListDivStyles = stylex.create({
     paddingLeft: "1rem",
     paddingRight: "1rem",
   },
-  centerDiv: {
+  addNewLocationDiv: {
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "flex-end",
+    paddingRight: "2rem",
+    marginTop: "1rem",
+  },
+  addNewLocationText: {
+    paddingLeft: "2rem",
+    paddingRight: "2rem",
+    color: colors.darkBlue,
+    fontSize: "1rem",
+    fontWeight: 800,
   },
 })

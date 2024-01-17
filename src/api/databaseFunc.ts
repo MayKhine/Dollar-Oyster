@@ -9,7 +9,6 @@ export const getPlaces = async () => {
 
 export const addPlace = async (data: enterdFormDataType) => {
   const formData = JSON.stringify(data)
-  console.log("sending fomr data: ", formData)
 
   const result = await fetch("http://localhost:3300/addplace", {
     method: "POST",

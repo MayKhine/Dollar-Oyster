@@ -1,15 +1,18 @@
-import { useLoadScript } from "@react-google-maps/api"
+import { Libraries, useLoadScript } from "@react-google-maps/api"
 import { googleMapApiKey } from "../../googleMapConfig"
 
 type GoogleMapLibLoadFormProps = {
   cancleFn: () => void
 }
+
+const libraries: Libraries = ["places"]
+
 export const GoogleMapLibLoadForm = ({
   cancleFn,
 }: GoogleMapLibLoadFormProps) => {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: googleMapApiKey,
-    libraries: ["places"],
+    libraries,
   })
   if (!isLoaded) return <div> Loading </div>
 

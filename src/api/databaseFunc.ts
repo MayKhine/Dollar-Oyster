@@ -17,6 +17,23 @@ export const addPlace = async (data: enterdFormDataType) => {
     body: formData,
   })
   const response = await result.json()
-  // console.log("RESPONSE : ", response)
+  console.log("RESPONSE : ", response)
+  return response
+}
+
+export const checkPlace = async ({
+  name,
+  address,
+}: {
+  name: string
+  address: string
+}) => {
+  const result = await fetch("http://localhost:3300/checkplace", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name: name, address: address }),
+  })
+  const response = await result.json()
+  console.log("Db func check place Response: ", response)
   return response
 }

@@ -72,11 +72,11 @@ export const RestaurantListDiv = ({
 
       {getPlacesQuery.isError && <div> Error </div>}
 
-      {getPlacesQuery.isSuccess && getPlacesQuery.data.data.length == 0 && (
+      {getPlacesQuery.isSuccess && getPlacesQuery.data.data?.length == 0 && (
         <div> No Dollar Oyster Places </div>
       )}
 
-      {getPlacesQuery.isSuccess && getPlacesQuery.data.data.length > 0 && (
+      {getPlacesQuery.isSuccess && getPlacesQuery.data.data?.length > 0 && (
         <div {...stylex.props(restaurantListDivStyles.listDiv)}>
           {getPlacesQuery.data.data.map(
             (place: restaurantDataType, index: number) => {

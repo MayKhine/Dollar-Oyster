@@ -27,6 +27,7 @@ specifiers:
   react-router-dom: ^6.21.1
   typescript: ^5.2.2
   use-places-autocomplete: ^4.0.1
+  uuid: ^9.0.1
   vite: ^5.0.8
   vite-plugin-stylex: ^0.4.1
   vite-plugin-stylex-dev: ^0.2.2
@@ -46,6 +47,7 @@ dependencies:
   react-google-autocomplete: 2.7.3_react@18.2.0
   react-router-dom: 6.21.1_biqbaboplfbrettd7655fr4n2y
   use-places-autocomplete: 4.0.1_react@18.2.0
+  uuid: 9.0.1
   vite-plugin-stylex: 0.4.1_oq2jvsheubxhy5wreszpnuz4ym
   vite-plugin-stylex-dev: 0.2.2
 
@@ -2131,6 +2133,11 @@ packages:
   /utility-types/3.10.0:
     resolution: {integrity: sha512-O11mqxmi7wMKCo6HKFt5AhO4BwY3VV68YU07tgxfz8zJTIxr4BpsezN49Ffwy9j3ZpwwJp4fkRwjRzq3uWE6Rg==}
     engines: {node: '>= 4'}
+    dev: false
+
+  /uuid/9.0.1:
+    resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
+    hasBin: true
     dev: false
 
   /vite-plugin-stylex-dev/0.2.2:

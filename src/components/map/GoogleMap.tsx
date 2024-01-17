@@ -36,7 +36,7 @@ export const GoogleMap = ({ mapPosition, zoom }: GoogleMapProps) => {
           mapId={googleMapID}
         >
           {getPlacesQuery.isSuccess &&
-            getPlacesQuery.data.data.map(
+            getPlacesQuery.data.data?.map(
               (place: restaurantDataType, index: number) => {
                 return (
                   <MapMarker

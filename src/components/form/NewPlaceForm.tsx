@@ -15,7 +15,7 @@ import { CustomText } from "../UI/CustomText"
 import { SuggestionDropDown } from "../UI/SuggestionDropDown"
 import { positionType } from "../map/MapMarker"
 import { ErrorText } from "../UI/ErrorText"
-import { addPlace } from "../../api/databaseFunc"
+import { addPlace, checkPlace } from "../../api/databaseFunc"
 // import { OverlayModal } from "../UI/OverlayModal"
 
 type NewPlaceFormProps = {
@@ -28,8 +28,8 @@ type NewPlaceFormProps = {
 export type enterdFormDataType = {
   name: string
   link: string
-  lat: string
-  lng: string
+  lat: number
+  lng: number
   // googleMapLink: string
   address: string
   notes: string
@@ -39,11 +39,11 @@ export type enterdFormDataType = {
   to: string
 }
 
-type dollarDealType = {
-  days: Array<number>
-  from: string
-  to: string
-}
+// type dollarDealType = {
+//   days: Array<number>
+//   from: string
+//   to: string
+// }
 
 export const NewPlaceForm = ({
   cancelFn,
@@ -51,8 +51,16 @@ export const NewPlaceForm = ({
   setZoom,
 }: NewPlaceFormProps) => {
   const queryClient = useQueryClient()
+
   const addPlaceMutation = useMutation({
     mutationFn: addPlace,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["places"] })
+    },
+  })
+
+  const checkIfPlaceExists = useMutation({
+    mutationFn: checkPlace,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["places"] })
     },
@@ -69,8 +77,8 @@ export const NewPlaceForm = ({
   const [enteredFormData, setEnteredFormData] = useState<enterdFormDataType>({
     name: "",
     link: "",
-    lat: "",
-    lng: "",
+    lat: 0,
+    lng: 0,
     // googleMapLink: "",
     address: "",
     notes: "",
@@ -145,59 +153,77 @@ export const NewPlaceForm = ({
       }))
     }
 
-    if (totalDealDays == 0) {
-      setEnteredFormError((prevVal) => ({
-        ...prevVal,
-        ["days"]: "Deal days need to be selected.",
-      }))
-    }
+    checkIfPlaceExists.mutate({
+      name: enteredFormData.name,
+      address: enteredFormData.address,
+    })
 
-    if (enteredFormData.from.length == 0) {
-      setEnteredFormError((prevVal) => ({
-        ...prevVal,
-        ["from"]: "Starting time needs to be selected",
-      }))
-    }
-    if (enteredFormData.to.length == 0) {
-      setEnteredFormError((prevVal) => ({
-        ...prevVal,
-        ["to"]: "Ending time needs to be selected",
-      }))
-    }
+    if (checkIfPlaceExists.isSuccess) {
+      if (checkIfPlaceExists.data.success == true) {
+        setEnteredFormError((prevVal) => ({
+          ...prevVal,
+          ["name"]: "Restaurant already exists in the list.",
+        }))
+      } else {
+        //check deal days are selected
+        if (totalDealDays == 0) {
+          setEnteredFormError((prevVal) => ({
+            ...prevVal,
+            ["days"]: "Deal days need to be selected.",
+          }))
+        }
 
-    const fromTime: DateTime | string = enteredFormData.from
-    const toTime: DateTime | string = enteredFormData.to
-    if (
-      enteredFormData.from.length != 0 &&
-      enteredFormData.to.length != 0 &&
-      toTime <= fromTime
-    ) {
-      setEnteredFormError((prevVal) => ({
-        ...prevVal,
-        ["to"]: "Ending time needs to be after the starting time",
-      }))
-    }
+        //check tiimes are selected
+        if (enteredFormData.from.length == 0) {
+          setEnteredFormError((prevVal) => ({
+            ...prevVal,
+            ["from"]: "Starting time needs to be selected",
+          }))
+        }
 
-    if (
-      enteredFormError.name.length == 0 &&
-      enteredFormError.days.length == 0 &&
-      enteredFormError.from.length == 0 &&
-      enteredFormError.to.length == 0 &&
-      //check name, total deal days, from and to
-      enteredFormData.name.length > 0 &&
-      totalDealDays > 0 &&
-      enteredFormData.from.length > 0 &&
-      enteredFormData.to.length > 0 &&
-      fromTime < toTime
-    ) {
-      console.log("entered form error: ", enteredFormError)
-      console.log("PLESE Proceed with submittion", enteredFormData)
-      //send data to backend
-      //pop up a notification and disapear it
-      addPlaceMutation.mutate(enteredFormData)
-      // setOverlay(true)
-      // const boston = { lat: 42.36, lng: -71.1 }
-      // setMapPosition(boston)
+        if (enteredFormData.to.length == 0) {
+          setEnteredFormError((prevVal) => ({
+            ...prevVal,
+            ["to"]: "Ending time needs to be selected",
+          }))
+        }
+
+        const fromTime: DateTime | string = enteredFormData.from
+        const toTime: DateTime | string = enteredFormData.to
+        if (
+          enteredFormData.from.length != 0 &&
+          enteredFormData.to.length != 0 &&
+          toTime <= fromTime
+        ) {
+          setEnteredFormError((prevVal) => ({
+            ...prevVal,
+            ["to"]: "Ending time needs to be after the starting time",
+          }))
+        }
+
+        //if there's not error and eveyrhting is good
+        if (
+          enteredFormError.name.length == 0 &&
+          enteredFormError.days.length == 0 &&
+          enteredFormError.from.length == 0 &&
+          enteredFormError.to.length == 0 &&
+          //check name, total deal days, from and to
+          enteredFormData.name.length > 0 &&
+          totalDealDays > 0 &&
+          enteredFormData.from.length > 0 &&
+          enteredFormData.to.length > 0 &&
+          fromTime < toTime
+        ) {
+          console.log("PROCEED with data submission", enteredFormData)
+          //send data to backend
+          //pop up a notification and disapear it
+          addPlaceMutation.mutate(enteredFormData)
+          cancelFn()
+          // setOverlay(true)
+          // const boston = { lat: 42.36, lng: -71.1 }
+          // setMapPosition(boston)
+        }
+      }
     }
   }
 
@@ -221,9 +247,10 @@ export const NewPlaceForm = ({
     handleInputChange(results[0].formatted_address, "address")
 
     const { lat, lng } = await getLatLng(results[0])
+    // handleInputChange(lat.toString(), "lat")
+    // handleInputChange(lng.toString(), "lng")
     handleInputChange(lat, "lat")
     handleInputChange(lng, "lng")
-
     setMapPosition({ lat: lat, lng: lng })
     setZoom(20)
   }

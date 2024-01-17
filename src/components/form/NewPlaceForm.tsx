@@ -16,14 +16,19 @@ import { SuggestionDropDown } from "../UI/SuggestionDropDown"
 import { positionType } from "../map/MapMarker"
 import { ErrorText } from "../UI/ErrorText"
 import { addPlace } from "../../api/databaseFunc"
+import { start } from "repl"
 // import { OverlayModal } from "../UI/OverlayModal"
 
+type setAddNewPlaceSuccessProps = {
+  success: boolean
+  name: string
+}
 type NewPlaceFormProps = {
   cancelFn: () => void
   mapPosition: positionType
   setMapPosition: (position: positionType) => void
   setZoom: (zoom: number) => void
-  setAddNewPlaceSuccess: ({ success: boolean, name: string }) => void
+  setAddNewPlaceSuccess: ({ success, name }: setAddNewPlaceSuccessProps) => void
 }
 
 export type enterdFormDataType = {
@@ -179,18 +184,18 @@ export const NewPlaceForm = ({
       }))
     }
 
-    const fromTime: DateTime | string = enteredFormData.from
-    const toTime: DateTime | string = enteredFormData.to
-    if (
-      enteredFormData.from.length != 0 &&
-      enteredFormData.to.length != 0 &&
-      toTime <= fromTime
-    ) {
-      setEnteredFormError((prevVal) => ({
-        ...prevVal,
-        ["to"]: "Ending time needs to be after the starting time",
-      }))
-    }
+    // const fromTime: DateTime | string = enteredFormData.from
+    // const toTime: DateTime | string = enteredFormData.to
+    // if (
+    //   enteredFormData.from.length != 0 &&
+    //   enteredFormData.to.length != 0 &&
+    //   toTime <= fromTime
+    // ) {
+    //   setEnteredFormError((prevVal) => ({
+    //     ...prevVal,
+    //     ["to"]: "Ending time needs to be after the starting time",
+    //   }))
+    // }
 
     //if there's not error and eveyrhting is good
     if (
@@ -202,8 +207,8 @@ export const NewPlaceForm = ({
       enteredFormData.name.length > 0 &&
       totalDealDays > 0 &&
       enteredFormData.from.length > 0 &&
-      enteredFormData.to.length > 0 &&
-      fromTime < toTime
+      enteredFormData.to.length > 0
+      // fromTime < toTime
     ) {
       console.log("PROCEED with data submission", enteredFormData)
       //send data to backend
@@ -243,9 +248,35 @@ export const NewPlaceForm = ({
     setZoom(20)
   }
 
+  // const generateTimeOptions = () => {
+  //   const start = DateTime.local().set({ hour: 9, minute: 0 })
+  //   const end = DateTime.local().set({ hour: 23, minute: 59 })
+  //   const afterMidNight = DateTime.local().set({ hour: 3, minute: 0 })
+  //   const timeOptions = []
+
+  //   let current = start
+
+  //   while (current <= end) {
+  //     timeOptions.push(current.toFormat("hh:mm a"))
+
+  //     current = current.plus({ minutes: 30 })
+  //   }
+
+  //   // console.log("CXurrent timeoptiosn: ", current, timeOptions)
+  //   //reset current
+  //   current = DateTime.local().set({ hour: 0, minute: 0 })
+  //   while (current <= afterMidNight) {
+  //     timeOptions.push(current.toFormat("hh:mm a"))
+
+  //     current = current.plus({ minutes: 15 })
+  //   }
+
+  //   return timeOptions
+  // }
+
   const generateTimeOptions = () => {
-    const start = DateTime.local().set({ hour: 7, minute: 0 })
-    const end = DateTime.local().set({ hour: 12, minute: 59 })
+    const start = DateTime.local().set({ hour: 9, minute: 0 })
+    const end = DateTime.local().set({ hour: 23, minute: 59 })
     const afterMidNight = DateTime.local().set({ hour: 3, minute: 0 })
     const timeOptions = []
 
@@ -257,6 +288,7 @@ export const NewPlaceForm = ({
       current = current.plus({ minutes: 30 })
     }
 
+    // console.log("CXurrent timeoptiosn: ", current, timeOptions)
     //reset current
     current = DateTime.local().set({ hour: 0, minute: 0 })
     while (current <= afterMidNight) {
@@ -269,6 +301,11 @@ export const NewPlaceForm = ({
   }
 
   const timeOptions = generateTimeOptions()
+  const newTimeOptions = timeOptions.slice(5)
+
+  console.log("timeOptions: ", timeOptions)
+  console.log("newTimeOptions: ", newTimeOptions)
+
   const restaurantData = data.map((e) => e.description)
   return (
     <div {...stylex.props(newPlaceFormStyles.base)}>
@@ -443,7 +480,6 @@ export const NewPlaceForm = ({
                     newPlaceFormStyles.selectTime
                   )}
                   onClick={() => {
-                    console.log("what is time select", timeSelect)
                     setTimeSelect("from")
                   }}
                   value={enteredFormData.from}
@@ -499,9 +535,11 @@ export const NewPlaceForm = ({
                     console.log("On Change")
                   }}
                 ></input>
-                {timeSelect == "to" && (
+                {timeSelect == "to" && enteredFormData.from.length > 0 && (
                   <SuggestionDropDown
-                    data={timeOptions}
+                    data={timeOptions.slice(
+                      timeOptions.indexOf(enteredFormData.from) + 1
+                    )}
                     onSelectFn={(event) => {
                       handleInputChange(event, "to")
 
@@ -560,11 +598,12 @@ const newPlaceFormStyles = stylex.create({
   base: {
     // backgroundColor: colors.offwhite2,
     backgroundColor: colors.lightBlue,
-    marginLeft: "2.5rem",
-    marginRight: "2.5rem",
+    margin: "2rem",
+    // marginLeft: "2.5rem",
+    // marginRight: "2.5rem",
     padding: "1.5rem",
-    // border: "1px black solid",
-    // borderRadius: "1rem",
+    border: `.2rem ${colors.darkBlue} solid`,
+    borderRadius: "1rem",
     boxShadow: "1rem",
     height: "60%",
   },

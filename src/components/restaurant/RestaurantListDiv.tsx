@@ -38,11 +38,11 @@ export const RestaurantListDiv = ({
     // return dateA.toMillis() - dateB.toMillis()
   }
 
-  if (getPlacesQuery.isSuccess && getPlacesQuery.data.data?.length) {
-    const sortedList = getPlacesQuery.data.data?.sort(sortTheList)
-    // console.log("NOT SORTED list: ", getPlacesQuery.data.data)
-    // console.log("Sorted list: ", sortedList)
-  }
+  // if (getPlacesQuery.isSuccess && getPlacesQuery.data.data?.length) {
+  //   const sortedList = getPlacesQuery.data.data?.sort(sortTheList)
+  // console.log("NOT SORTED list: ", getPlacesQuery.data.data)
+  // console.log("Sorted list: ", sortedList)
+  // }
 
   return (
     <div {...stylex.props(restaurantListDivStyles.scrollSide)}>
@@ -59,7 +59,7 @@ export const RestaurantListDiv = ({
           }
           color={colors.darkBlue}
           fontWeight={400}
-          bgColor={colors.offwhite}
+          // bgColor={colors.offwhite}
           fontSize="1rem"
         />
       </div>
@@ -123,11 +123,12 @@ const restaurantListDivStyles = stylex.create({
     marginLeft: "45%",
     marginTop: "5rem",
     // width: "55%",
-
+    // height: "80%",
     flex: "1",
     // flex: "0",
   },
   textDiv: {
+    marginTop: "1.5rem",
     paddingLeft: "2rem",
     paddingRight: "2rem",
   },

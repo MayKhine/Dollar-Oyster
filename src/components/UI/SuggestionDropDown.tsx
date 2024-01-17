@@ -46,6 +46,11 @@ const suggestionDropDownStyles = stylex.create({
     flexDirection: "column",
     position: "relative",
     fontSize: "1.1rem",
+    // position: "absolute",
+    // width: "100%",
+    // maxHeight: "15rem",
+    // zIndex: "1",
+    // marginTop: "4.3rem",
   },
   option: {
     backgroundColor: {

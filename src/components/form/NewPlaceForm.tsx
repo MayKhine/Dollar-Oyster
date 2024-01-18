@@ -101,11 +101,13 @@ export const NewPlaceForm = ({
     days: [0, 0, 0, 0, 0, 0, 0],
     from: "",
     to: "",
-
-    // deal: { days: [0, 0, 0, 0, 0, 0, 0], from: "", to: "" },
   })
 
-  const handleInputChange = (value: string, id: string, index?: number) => {
+  const handleInputChange = (
+    value: string | number,
+    id: string,
+    index?: number
+  ) => {
     // console.log("Handle Input Change value: ", value, "id: ", id)
 
     // deal: days
@@ -237,7 +239,7 @@ export const NewPlaceForm = ({
     handleInputChange(name, "name")
     handleInputChange(results[0].formatted_address, "address")
 
-    const { lat, lng } = await getLatLng(results[0])
+    const { lat, lng } = getLatLng(results[0])
     // handleInputChange(lat.toString(), "lat")
     // handleInputChange(lng.toString(), "lng")
     handleInputChange(lat, "lat")
@@ -302,13 +304,9 @@ export const NewPlaceForm = ({
   const restaurantData = data.map((e) => e.description)
 
   const map = useMap()
-
   useEffect(() => {
     if (!map) return
-
-    // do something with the map instance
     map.panTo(mapPosition)
-    console.log("Map Pan to ")
   }, [map, mapPosition])
 
   const handleCancel = () => {
@@ -319,7 +317,6 @@ export const NewPlaceForm = ({
   }
   return (
     <div {...stylex.props(newPlaceFormStyles.base)}>
-      {/* {overlay && <OverlayModal title="over lay title" text="overlay text" />} */}
       <div {...stylex.props(newPlaceFormStyles.title)}>
         <CustomText
           text="New Dollar Oyster Deal"
@@ -334,12 +331,7 @@ export const NewPlaceForm = ({
 
           <input
             {...stylex.props(newPlaceFormStyles.input)}
-            value={
-              // enteredFormData.name.length == 0
-              //   ? value
-              //   : enteredFormData.name
-              value
-            }
+            value={value}
             id="name"
             onChange={(event) => {
               setValue(event.target.value)
@@ -606,11 +598,8 @@ export const NewPlaceForm = ({
 
 const newPlaceFormStyles = stylex.create({
   base: {
-    // backgroundColor: colors.offwhite2,
     backgroundColor: colors.lightBlue,
     margin: "2rem",
-    // marginLeft: "2.5rem",
-    // marginRight: "2.5rem",
     padding: "1.5rem",
     border: `.2rem ${colors.darkBlue} solid`,
     borderRadius: "1rem",

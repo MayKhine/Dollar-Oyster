@@ -35,14 +35,7 @@ export const RestaurantListDiv = ({
     const dateB = DateTime.fromISO(b.date)
 
     return dateB.toMillis() - dateA.toMillis()
-    // return dateA.toMillis() - dateB.toMillis()
   }
-
-  // if (getPlacesQuery.isSuccess && getPlacesQuery.data.data?.length) {
-  //   const sortedList = getPlacesQuery.data.data?.sort(sortTheList)
-  // console.log("NOT SORTED list: ", getPlacesQuery.data.data)
-  // console.log("Sorted list: ", sortedList)
-  // }
 
   return (
     <div {...stylex.props(restaurantListDivStyles.scrollSide)}>
@@ -108,7 +101,7 @@ export const RestaurantListDiv = ({
           {getPlacesQuery.data.data
             ?.sort(sortTheList)
             .map((place: restaurantDataType, index: number) => {
-              return <Restaurant data={place} key={index} />
+              return <Restaurant data={place} key={index} setZoom={setZoom} />
             })}
         </div>
       )}

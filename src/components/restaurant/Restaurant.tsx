@@ -2,19 +2,46 @@ import { restaurantDataType } from "../map/MapMarker"
 import * as stylex from "@stylexjs/stylex"
 import { colors } from "../../assets/styles/tokens.stylex"
 import heart from "../../assets/images/heart.svg"
+import { useEffect, useState } from "react"
+import { useMap } from "@vis.gl/react-google-maps"
 
 type RestaurantProps = {
   data: restaurantDataType
+  setZoom: (val: number) => void
 }
 
 export const Restaurant = ({ data }: RestaurantProps) => {
+  const boston = { lat: 42.36, lng: -71.1 }
+  const [position, setPosition] = useState(boston)
+
+  const map = useMap()
+  const [zoom, setZoom] = useState(12)
+  useEffect(() => {
+    if (!map) return
+    map.panTo(position)
+    map.setZoom(zoom)
+  }, [map, position, zoom])
+
+  const handleOnHover = () => {
+    console.log("On Mouse Over ", data.name)
+    setPosition({ lat: data.lat, lng: data.lng })
+    setZoom(15)
+  }
+
+  const handleOnClickName = () => {
+    console.log("On name Click: ", data.name)
+    setZoom(18)
+  }
+
   return (
-    <div
-      {...stylex.props(restaurantStyles.base)}
-      onMouseOver={() => console.log("On Mouse Over: ", data.name)}
-    >
+    <div {...stylex.props(restaurantStyles.base)} onMouseOver={handleOnHover}>
       <div {...stylex.props(restaurantStyles.nameAndSvg)}>
-        <div {...stylex.props(restaurantStyles.name)}>{data.name}</div>
+        <div
+          {...stylex.props(restaurantStyles.name)}
+          onClick={handleOnClickName}
+        >
+          {data.name}
+        </div>
         <div {...stylex.props(restaurantStyles.heartDiv)}>
           <img src={heart} {...stylex.props(restaurantStyles.heartSvg)}></img>
         </div>
@@ -51,7 +78,7 @@ const restaurantStyles = stylex.create({
     cursor: "pointer",
   },
   address: {
-    cursor: "pointer",
+    // cursor: "pointer",
     fontSize: "1rem",
     fontWeight: "600",
   },

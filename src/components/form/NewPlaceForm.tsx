@@ -8,7 +8,7 @@ import { DateTime } from "luxon"
 import { CustomButton } from "../UI/CustomButton"
 import { colors } from "../../assets/styles/tokens.stylex"
 import * as stylex from "@stylexjs/stylex"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { FormInput } from "../UI/FormInput"
 import { CustomText } from "../UI/CustomText"
 
@@ -16,6 +16,7 @@ import { SuggestionDropDown } from "../UI/SuggestionDropDown"
 import { positionType } from "../map/MapMarker"
 import { ErrorText } from "../UI/ErrorText"
 import { addPlace } from "../../api/databaseFunc"
+import { useMap } from "@vis.gl/react-google-maps"
 // import { OverlayModal } from "../UI/OverlayModal"
 
 type setAddNewPlaceSuccessProps = {
@@ -50,6 +51,7 @@ export type enterdFormDataType = {
 
 export const NewPlaceForm = ({
   cancelFn,
+  mapPosition,
   setMapPosition,
   setZoom,
   setAddNewPlaceSuccess,
@@ -68,10 +70,7 @@ export const NewPlaceForm = ({
         }))
       } else {
         setAddNewPlaceSuccess({ success: true, name: enteredFormData.name })
-        cancelFn()
-        const boston = { lat: 42.36, lng: -71.1 }
-        setZoom(12)
-        setMapPosition(boston)
+        handleCancel()
       }
     },
   })
@@ -244,7 +243,7 @@ export const NewPlaceForm = ({
     handleInputChange(lat, "lat")
     handleInputChange(lng, "lng")
     setMapPosition({ lat: lat, lng: lng })
-    setZoom(20)
+    setZoom(18)
   }
 
   // const generateTimeOptions = () => {
@@ -302,6 +301,22 @@ export const NewPlaceForm = ({
   const timeOptions = generateTimeOptions()
   const restaurantData = data.map((e) => e.description)
 
+  const map = useMap()
+
+  useEffect(() => {
+    if (!map) return
+
+    // do something with the map instance
+    map.panTo(mapPosition)
+    console.log("Map Pan to ")
+  }, [map, mapPosition])
+
+  const handleCancel = () => {
+    cancelFn()
+    const boston = { lat: 42.36, lng: -71.1 }
+    setZoom(12)
+    setMapPosition(boston)
+  }
   return (
     <div {...stylex.props(newPlaceFormStyles.base)}>
       {/* {overlay && <OverlayModal title="over lay title" text="overlay text" />} */}
@@ -573,7 +588,7 @@ export const NewPlaceForm = ({
           color={colors.offwhite}
           fontSize="1rem"
           padding=".5rem"
-          onClickFn={cancelFn}
+          onClickFn={handleCancel}
         />
         <CustomButton
           text="Add"

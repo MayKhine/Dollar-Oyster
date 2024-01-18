@@ -1,18 +1,21 @@
-import { APIProvider, Map, InfoWindow } from "@vis.gl/react-google-maps"
+import { APIProvider, Map, InfoWindow, useMap } from "@vis.gl/react-google-maps"
 import * as stylex from "@stylexjs/stylex"
 import { googleMapApiKey, googleMapID } from "../../googleMapConfig"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { MapMarker, positionType, restaurantDataType } from "./MapMarker"
 import { getPlaces } from "../../api/databaseFunc"
 import { colors } from "../../assets/styles/tokens.stylex"
 
-type GoogleMapProps = {
+type GoogleMapComponentProps = {
   mapPosition: positionType
   setMapPosition?: (position: positionType) => void
   zoom: number
 }
-export const GoogleMap = ({ mapPosition, zoom }: GoogleMapProps) => {
+export const GoogleMapComponent = ({
+  mapPosition,
+  zoom,
+}: GoogleMapComponentProps) => {
   const getPlacesQuery = useQuery({ queryKey: ["places"], queryFn: getPlaces })
   console.log("What is map Position in Map : ", mapPosition)
 
@@ -26,38 +29,54 @@ export const GoogleMap = ({ mapPosition, zoom }: GoogleMapProps) => {
     setText(text)
   }
 
+  // const mapRef = useRef()
+  // const onLoad = useCallback((map: Map) => (mapRef.current = map), [])
+  // const map = useMap()
+  // useEffect(() => {
+  //   if (!map) return
+
+  //   // do something with the map instance
+  //   map.panTo(mapPosition)
+  // }, [map, mapPosition])
+  const boston = { lat: 42.36, lng: -71.1 }
+
   return (
     <div {...stylex.props(googleMapStyles.base)}>
-      <APIProvider apiKey={googleMapApiKey}>
-        <Map
-          {...stylex.props(googleMapStyles.map)}
-          zoom={zoom}
-          center={mapPosition}
-          mapId={googleMapID}
-        >
-          {getPlacesQuery.isSuccess &&
-            getPlacesQuery.data.data?.map(
-              (place: restaurantDataType, index: number) => {
-                return (
-                  <MapMarker
-                    key={index}
-                    data={place}
-                    onClickFn={() => {
-                      const position = { lat: place.lat, lng: place.lng }
-                      clickHandler(position, place.name)
-                    }}
-                  ></MapMarker>
-                )
-              }
-            )}
+      {/* <APIProvider apiKey={googleMapApiKey}> */}
+      <Map
+        {...stylex.props(googleMapStyles.map)}
+        zoom={zoom}
+        // center={mapPosition}
+        center={boston}
+        mapId={googleMapID}
+        // onCenterChanged={onLoad}
 
-          {open && (
-            <InfoWindow position={position} onCloseClick={() => setOpen(false)}>
-              <div>{text}</div>
-            </InfoWindow>
+        // onProjectionChanged={(event) => console.log("event: ", event)}
+        // onCenterChanged={(event) => console.log("event", event)}
+      >
+        {getPlacesQuery.isSuccess &&
+          getPlacesQuery.data.data?.map(
+            (place: restaurantDataType, index: number) => {
+              return (
+                <MapMarker
+                  key={index}
+                  data={place}
+                  onClickFn={() => {
+                    const position = { lat: place.lat, lng: place.lng }
+                    clickHandler(position, place.name)
+                  }}
+                ></MapMarker>
+              )
+            }
           )}
-        </Map>
-      </APIProvider>
+
+        {open && (
+          <InfoWindow position={position} onCloseClick={() => setOpen(false)}>
+            <div>{text}</div>
+          </InfoWindow>
+        )}
+      </Map>
+      {/* </APIProvider> */}
     </div>
   )
 }

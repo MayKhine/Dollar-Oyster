@@ -94,7 +94,6 @@ export const RestaurantListDiv = ({
             setMapPosition={setMapPosition}
             setZoom={setZoom}
           />
-          // <GoogleMapLibLoadForm cancleFn={cancelHandler} />
         )}
       </div>
 

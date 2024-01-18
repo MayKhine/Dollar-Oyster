@@ -1,9 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-// import { colors } from "../../assets/styles/tokens.stylex"
-import { GoogleMap } from "./GoogleMap"
-// import { CustomButton } from "../UI/CustomButton"
-// import { useState } from "react"
-// import { NewPlaceForm } from "../form/NewPlaceForm"
+import { GoogleMapComponent } from "./GoogleMap"
 import { positionType } from "./MapMarker"
 
 type MapDivProps = {
@@ -16,7 +12,7 @@ export const MapDiv = ({ mapPosition, setMapPosition, zoom }: MapDivProps) => {
     // <div {...stylex.props(MapDivStyles.fixedSide)}>
     <div {...stylex.props(MapDivStyles.base)}>
       <div {...stylex.props(MapDivStyles.map)}>
-        <GoogleMap
+        <GoogleMapComponent
           mapPosition={mapPosition}
           setMapPosition={setMapPosition}
           zoom={zoom}

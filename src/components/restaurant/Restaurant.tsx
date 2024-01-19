@@ -1,38 +1,55 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+
 import { restaurantDataType } from "../map/MapMarker"
 import * as stylex from "@stylexjs/stylex"
 import { colors } from "../../assets/styles/tokens.stylex"
 import heart from "../../assets/images/heart.svg"
 import { useEffect, useState } from "react"
 import { useMap } from "@vis.gl/react-google-maps"
+import { lovePlace } from "../../api/databaseFunc"
 
 type RestaurantProps = {
   data: restaurantDataType
-  setZoom: (val: number) => void
+  // setZoom: (val: number) => void
 }
 
 export const Restaurant = ({ data }: RestaurantProps) => {
   const boston = { lat: 42.36, lng: -71.1 }
   const [position, setPosition] = useState(boston)
+  const [zoom, setZoom] = useState(12)
 
   const map = useMap()
-  const [zoom, setZoom] = useState(12)
   useEffect(() => {
     if (!map) return
     map.panTo(position)
     map.setZoom(zoom)
   }, [map, position, zoom])
 
+  const queryClient = useQueryClient()
+  const lovePlaceMutation = useMutation({
+    mutationFn: lovePlace,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["places"] })
+      console.log("ON SUCCESS at loveplace MUtation: ", data)
+    },
+  })
+
   const handleOnHover = () => {
-    console.log("On Mouse Over ", data.name)
     setPosition({ lat: data.lat, lng: data.lng })
     setZoom(15)
   }
 
   const handleOnClickName = () => {
-    console.log("On name Click: ", data.name)
+    setPosition({ lat: data.lat, lng: data.lng })
     setZoom(18)
   }
 
+  const handleLoveClick = () => {
+    console.log("handle love click ", data.id)
+    lovePlaceMutation.mutate(data.id)
+  }
+
+  console.log("Restaurant data: ", data)
   return (
     <div {...stylex.props(restaurantStyles.base)} onMouseOver={handleOnHover}>
       <div {...stylex.props(restaurantStyles.nameAndSvg)}>
@@ -43,7 +60,11 @@ export const Restaurant = ({ data }: RestaurantProps) => {
           {data.name}
         </div>
         <div {...stylex.props(restaurantStyles.heartDiv)}>
-          <img src={heart} {...stylex.props(restaurantStyles.heartSvg)}></img>
+          <img
+            src={heart}
+            {...stylex.props(restaurantStyles.heartSvg)}
+            onClick={handleLoveClick}
+          ></img>
         </div>
       </div>
       {/* <div {...stylex.props(restaurantStyles.name)}>{data.name}</div> */}
@@ -63,13 +84,14 @@ const restaurantStyles = stylex.create({
     // borderRadius: "1rem",
 
     borderBottom: `.1rem solid ${colors.darkBlue}`,
-    // padding: "1rem",
-    paddingBottom: "1rem",
-    margin: "1rem",
+    padding: "2rem",
+    paddingTop: "1.5rem",
+    paddingBottom: "1.5rem",
+    // margin: "1rem",
     color: colors.darkBlue,
     backgroundColor: {
       default: colors.green,
-      ":hover": colors.offwhite,
+      ":hover": colors.lightGreen,
     },
   },
   name: {
@@ -78,7 +100,6 @@ const restaurantStyles = stylex.create({
     cursor: "pointer",
   },
   address: {
-    // cursor: "pointer",
     fontSize: "1rem",
     fontWeight: "600",
   },

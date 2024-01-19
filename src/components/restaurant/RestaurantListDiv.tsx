@@ -101,7 +101,13 @@ export const RestaurantListDiv = ({
           {getPlacesQuery.data.data
             ?.sort(sortTheList)
             .map((place: restaurantDataType, index: number) => {
-              return <Restaurant data={place} key={index} setZoom={setZoom} />
+              return (
+                <Restaurant
+                  data={place}
+                  key={index}
+                  //  setZoom={setZoom}
+                />
+              )
             })}
         </div>
       )}
@@ -125,14 +131,15 @@ const restaurantListDivStyles = stylex.create({
     paddingRight: "2rem",
   },
   listDiv: {
-    paddingLeft: "1rem",
-    paddingRight: "1rem",
+    // paddingLeft: "1rem",
+    // paddingRight: "1rem",
   },
   addNewLocationDiv: {
     display: "flex",
     justifyContent: "flex-end",
     paddingRight: "2rem",
     marginTop: "1rem",
+    marginBottom: "1rem",
   },
   addNewLocationText: {
     marginTop: "1rem",

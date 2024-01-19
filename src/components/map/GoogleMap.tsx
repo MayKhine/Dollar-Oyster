@@ -21,12 +21,16 @@ export const GoogleMapComponent = ({
 
   const [open, setOpen] = useState(false)
   const [position, setPosition] = useState<positionType>()
-  const [text, setText] = useState("")
+  const [text, setText] = useState({ name: "", address: "" })
 
-  const clickHandler = (position: positionType, text: string) => {
+  const clickHandler = (
+    position: positionType,
+    name: string,
+    address: string
+  ) => {
     setOpen(true)
     setPosition(position)
-    setText(text)
+    setText({ name: name, address: address })
   }
 
   // const mapRef = useRef()
@@ -41,7 +45,12 @@ export const GoogleMapComponent = ({
   const boston = { lat: 42.36, lng: -71.1 }
 
   return (
-    <div {...stylex.props(googleMapStyles.base)}>
+    <div
+      {...stylex.props(googleMapStyles.base)}
+      onClick={() => {
+        setOpen(false)
+      }}
+    >
       {/* <APIProvider apiKey={googleMapApiKey}> */}
       <Map
         {...stylex.props(googleMapStyles.map)}
@@ -63,7 +72,7 @@ export const GoogleMapComponent = ({
                   data={place}
                   onClickFn={() => {
                     const position = { lat: place.lat, lng: place.lng }
-                    clickHandler(position, place.name)
+                    clickHandler(position, place.name, place.address)
                   }}
                 ></MapMarker>
               )
@@ -72,7 +81,10 @@ export const GoogleMapComponent = ({
 
         {open && (
           <InfoWindow position={position} onCloseClick={() => setOpen(false)}>
-            <div>{text}</div>
+            <div>
+              <div {...stylex.props(googleMapStyles.title)}>{text.name}</div>
+              <div> {text.address}</div>
+            </div>
           </InfoWindow>
         )}
       </Map>
@@ -96,4 +108,5 @@ const googleMapStyles = stylex.create({
     height: "100%",
     borderRadius: "1rem",
   },
+  title: { fontSize: ".9rem", fontWeight: "400" },
 })

@@ -31,11 +31,6 @@ export const MapMarker = ({ onClickFn, data }: MapMarkerProps) => {
   const latlng = { lat: data.lat, lng: data.lng }
   return (
     <AdvancedMarker position={latlng} title={"Oyster"} onClick={onClickFn}>
-      {/* <Pin
-        background={"red"}
-        borderColor={colors.offwhite}
-        glyphColor={colors.pink}
-      ></Pin> */}
       <img {...stylex.props(mapMarkerStyles.marker)} src={oyster}></img>
     </AdvancedMarker>
   )

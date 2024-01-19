@@ -15,6 +15,7 @@ export const colorsObj = {
   orange: "#F15E51",
   lightBlue: "#A6D4F7",
   green: "#B1E2BC",
+  lightGreen: "#c7f0d0",
 } as const
 
 export const semanticColorsObj = {

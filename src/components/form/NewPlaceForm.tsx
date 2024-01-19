@@ -51,11 +51,15 @@ export type enterdFormDataType = {
 
 export const NewPlaceForm = ({
   cancelFn,
-  mapPosition,
-  setMapPosition,
-  setZoom,
+  // mapPosition,
+  // setMapPosition,
+  // setZoom,
   setAddNewPlaceSuccess,
 }: NewPlaceFormProps) => {
+  const boston = { lat: 42.36, lng: -71.1 }
+  const [position, setPosition] = useState(boston)
+  const [zoom, setZoom] = useState(12)
+
   const queryClient = useQueryClient()
 
   const addPlaceMutation = useMutation({
@@ -244,7 +248,7 @@ export const NewPlaceForm = ({
     // handleInputChange(lng.toString(), "lng")
     handleInputChange(lat, "lat")
     handleInputChange(lng, "lng")
-    setMapPosition({ lat: lat, lng: lng })
+    setPosition({ lat: lat, lng: lng })
     setZoom(18)
   }
 
@@ -306,14 +310,14 @@ export const NewPlaceForm = ({
   const map = useMap()
   useEffect(() => {
     if (!map) return
-    map.panTo(mapPosition)
-  }, [map, mapPosition])
+    map.panTo(position)
+    map.setZoom(zoom)
+  }, [map, position, zoom])
 
   const handleCancel = () => {
+    map?.panTo(boston)
+    map?.setZoom(12)
     cancelFn()
-    const boston = { lat: 42.36, lng: -71.1 }
-    setZoom(12)
-    setMapPosition(boston)
   }
   return (
     <div {...stylex.props(newPlaceFormStyles.base)}>
@@ -599,8 +603,10 @@ export const NewPlaceForm = ({
 const newPlaceFormStyles = stylex.create({
   base: {
     backgroundColor: colors.lightBlue,
-    margin: "2rem",
-    padding: "1.5rem",
+    // margin: "2rem",
+    margin: "5%",
+    // padding: "1rem",
+    padding: "5%",
     border: `.2rem ${colors.darkBlue} solid`,
     borderRadius: "1rem",
     boxShadow: "1rem",

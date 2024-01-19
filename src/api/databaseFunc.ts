@@ -36,3 +36,14 @@ export const checkPlace = async ({
   console.log("Db func check place Response: ", response)
   return response
 }
+
+export const lovePlace = async (id: string) => {
+  const result = await fetch("http://localhost:3300/love", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id }),
+  })
+  const response = await result.json()
+  console.log("DB func love place : ", response)
+  return response
+}

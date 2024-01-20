@@ -10,7 +10,7 @@ import comment from "../../assets/images/comment.png"
 
 import { useEffect, useState } from "react"
 import { useMap } from "@vis.gl/react-google-maps"
-import { lovePlace } from "../../api/databaseFunc"
+import { commentPlace, lovePlace, unlovePlace } from "../../api/databaseFunc"
 
 type RestaurantProps = {
   data: restaurantDataType
@@ -38,6 +38,22 @@ export const Restaurant = ({ data }: RestaurantProps) => {
     },
   })
 
+  const unlovePlaceMutation = useMutation({
+    mutationFn: unlovePlace,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["places"] })
+      console.log("ON SUCCESS at Unloveplace MUtation: ", data)
+    },
+  })
+
+  const commentPlaceMutation = useMutation({
+    mutationFn: commentPlace,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["places"] })
+      console.log("ON SUCCESS at Comment MUtation: ", data)
+    },
+  })
+
   const handleOnHover = () => {
     setPosition({ lat: data.lat, lng: data.lng })
     setZoom(15)
@@ -51,6 +67,20 @@ export const Restaurant = ({ data }: RestaurantProps) => {
   const handleLoveClick = () => {
     console.log("handle love click ", data.id)
     lovePlaceMutation.mutate(data.id)
+  }
+
+  const handleUnloveClick = () => {
+    console.log("handle UNLOVE click ", data.id)
+    unlovePlaceMutation.mutate(data.id)
+  }
+
+  const handleCommentPlaceClick = () => {
+    console.log("handle comment place click ", data.id)
+    commentPlaceMutation.mutate({
+      id: data.id,
+      comment: "comment",
+      user: "username",
+    })
   }
 
   // console.log("Restaurant data: ", data)
@@ -85,15 +115,17 @@ export const Restaurant = ({ data }: RestaurantProps) => {
           <img
             src={unlove}
             {...stylex.props(restaurantStyles.svg)}
-            // onClick={handleLoveClick}
+            onClick={handleUnloveClick}
           ></img>
-          <div {...stylex.props(restaurantStyles.svgText)}>{data.love}</div>
+          {data.unlove > 0 && (
+            <div {...stylex.props(restaurantStyles.svgText)}>{data.unlove}</div>
+          )}
         </div>
         <div {...stylex.props(restaurantStyles.svgDiv)}>
           <img
             src={comment}
             {...stylex.props(restaurantStyles.svg)}
-            // onClick={handleLoveClick}
+            onClick={handleCommentPlaceClick}
           ></img>
           <div {...stylex.props(restaurantStyles.svgText)}>{data.love}</div>
         </div>
@@ -144,7 +176,7 @@ const restaurantStyles = stylex.create({
     marginRight: ".5rem",
     // justifyContent: "flex-end",
   },
-  svgText: { marginRight: ".5rem", alignSelf: "center" },
+  svgText: { alignSelf: "center" },
   svg: {
     height: "1.5rem",
     // height: "100%",

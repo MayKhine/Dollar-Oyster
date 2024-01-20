@@ -47,3 +47,36 @@ export const lovePlace = async (id: string) => {
   console.log("DB func love place : ", response)
   return response
 }
+
+export const unlovePlace = async (id: string) => {
+  const result = await fetch("http://localhost:3300/unlove", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id }),
+  })
+  const response = await result.json()
+  console.log("DB func unlove place : ", response)
+  return response
+}
+
+type commentPlaceType = {
+  id: string
+  comment: string
+  user: string
+}
+export const commentPlace = async (
+  // id: string,
+  // comment: string,
+  // user: string
+  { id, comment, user }: commentPlaceType
+) => {
+  // const result = await fetch("http://localhost:3300/comment", {
+  //   method: "POST",
+  //   headers: { "Content-Type": "application/json" },
+  //   body: JSON.stringify({ id, comment, user }),
+  // })
+  // const response = await result.json()
+  // console.log("DB func comment place : ", response)
+  // return response
+  console.log("comment place function is called", id, comment, user)
+}

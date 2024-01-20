@@ -21,6 +21,7 @@ export type restaurantDataType = {
   from: string
   to: string
   love: number
+  unlove: number
 }
 
 export type positionType = {

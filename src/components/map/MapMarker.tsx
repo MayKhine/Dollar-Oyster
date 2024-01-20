@@ -20,6 +20,7 @@ export type restaurantDataType = {
   days: Array<number>
   from: string
   to: string
+  love: number
 }
 
 export type positionType = {

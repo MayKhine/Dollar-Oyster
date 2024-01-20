@@ -3,7 +3,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { restaurantDataType } from "../map/MapMarker"
 import * as stylex from "@stylexjs/stylex"
 import { colors } from "../../assets/styles/tokens.stylex"
-import heart from "../../assets/images/heart.svg"
+import love from "../../assets/images/love.png"
+import unlove from "../../assets/images/unlove.png"
+
+import comment from "../../assets/images/comment.png"
+
 import { useEffect, useState } from "react"
 import { useMap } from "@vis.gl/react-google-maps"
 import { lovePlace } from "../../api/databaseFunc"
@@ -49,7 +53,7 @@ export const Restaurant = ({ data }: RestaurantProps) => {
     lovePlaceMutation.mutate(data.id)
   }
 
-  console.log("Restaurant data: ", data)
+  // console.log("Restaurant data: ", data)
   return (
     <div {...stylex.props(restaurantStyles.base)} onMouseOver={handleOnHover}>
       <div {...stylex.props(restaurantStyles.nameAndSvg)}>
@@ -59,17 +63,41 @@ export const Restaurant = ({ data }: RestaurantProps) => {
         >
           {data.name}
         </div>
-        <div {...stylex.props(restaurantStyles.heartDiv)}>
-          <img
-            src={heart}
-            {...stylex.props(restaurantStyles.heartSvg)}
-            onClick={handleLoveClick}
-          ></img>
-        </div>
       </div>
       {/* <div {...stylex.props(restaurantStyles.name)}>{data.name}</div> */}
       <div {...stylex.props(restaurantStyles.address)}> {data.address} </div>
       <div {...stylex.props(restaurantStyles.notes)}>{data.notes}</div>
+      <div {...stylex.props(restaurantStyles.svgDiv)}>
+        <div {...stylex.props(restaurantStyles.svgDiv)}>
+          {/* <div {...stylex.props(restaurantStyles.svgDiv2)}> */}
+          <img
+            src={love}
+            {...stylex.props(restaurantStyles.svg)}
+            onClick={handleLoveClick}
+          ></img>
+          {/* </div> */}
+
+          {data.love > 0 && (
+            <div {...stylex.props(restaurantStyles.svgText)}>{data.love}</div>
+          )}
+        </div>
+        <div {...stylex.props(restaurantStyles.svgDiv)}>
+          <img
+            src={unlove}
+            {...stylex.props(restaurantStyles.svg)}
+            // onClick={handleLoveClick}
+          ></img>
+          <div {...stylex.props(restaurantStyles.svgText)}>{data.love}</div>
+        </div>
+        <div {...stylex.props(restaurantStyles.svgDiv)}>
+          <img
+            src={comment}
+            {...stylex.props(restaurantStyles.svg)}
+            // onClick={handleLoveClick}
+          ></img>
+          <div {...stylex.props(restaurantStyles.svgText)}>{data.love}</div>
+        </div>
+      </div>
     </div>
   )
 }
@@ -107,14 +135,21 @@ const restaurantStyles = stylex.create({
     fontSize: "1rem",
     fontWeight: "400",
   },
-  heartDiv: {
-    height: "1.2rem",
-    alignSelf: "flex-end",
-    paddingRight: ".5rem",
+
+  svgDiv: {
+    marginTop: ".5rem",
+    display: "flex",
+    // width: "4rem",
+    // backgroundColor: colors.offwhite,
+    marginRight: ".5rem",
+    // justifyContent: "flex-end",
   },
-  heartSvg: {
-    height: "100%",
+  svgText: { marginRight: ".5rem", alignSelf: "center" },
+  svg: {
+    height: "1.5rem",
+    // height: "100%",
     cursor: "pointer",
+    marginRight: ".2rem",
   },
   nameAndSvg: {
     display: "flex",

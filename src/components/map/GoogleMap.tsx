@@ -13,11 +13,11 @@ type GoogleMapComponentProps = {
   zoom: number
 }
 export const GoogleMapComponent = ({
-  mapPosition,
+  // mapPosition,
   zoom,
 }: GoogleMapComponentProps) => {
   const getPlacesQuery = useQuery({ queryKey: ["places"], queryFn: getPlaces })
-  console.log("What is map Position in Map : ", mapPosition)
+  // console.log("What is map Position in Map : ", mapPosition)
 
   const [open, setOpen] = useState(false)
   const [position, setPosition] = useState<positionType>()

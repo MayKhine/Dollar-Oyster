@@ -2,6 +2,7 @@ import { AdvancedMarker } from "@vis.gl/react-google-maps"
 // import { colors } from "../../assets/styles/tokens.stylex"
 import * as stylex from "@stylexjs/stylex"
 import oyster from "../../assets/images/oysterMarker2.png"
+import { DateTime } from "luxon"
 
 export type MapMarkerProps = {
   onClickFn: () => void
@@ -18,6 +19,8 @@ export type restaurantDataType = {
   address: string
   notes: string
   days: Array<number>
+  // from: DateTime
+  // to: DateTime
   from: string
   to: string
   love: number

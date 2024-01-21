@@ -11,16 +11,36 @@ import comment from "../../assets/images/comment.png"
 import { useEffect, useState } from "react"
 import { useMap } from "@vis.gl/react-google-maps"
 import { commentPlace, lovePlace, unlovePlace } from "../../api/databaseFunc"
+import { DateTime } from "luxon"
 
 type RestaurantProps = {
   data: restaurantDataType
+  today: number
   // setZoom: (val: number) => void
 }
 
-export const Restaurant = ({ data }: RestaurantProps) => {
+export const Restaurant = ({ data, today }: RestaurantProps) => {
   const boston = { lat: 42.36, lng: -71.1 }
   const [position, setPosition] = useState(boston)
   const [zoom, setZoom] = useState(12)
+
+  const now = DateTime.now().setZone("America/New_York")
+  // console.log("Now: ", now)
+
+  const isOpenTime = (now: DateTime) => {
+    const fromDT = DateTime.fromFormat(data.from, "hh:mm a")
+    let toDT = DateTime.fromFormat(data.to, "hh:mm a")
+    if (toDT <= DateTime.local().set({ hour: 9, minute: 0 })) {
+      //increase the date
+      toDT = toDT.plus({ day: 1 })
+    }
+
+    if (fromDT <= now && now <= toDT) {
+      return true
+    }
+
+    return false
+  }
 
   const map = useMap()
   useEffect(() => {
@@ -91,7 +111,7 @@ export const Restaurant = ({ data }: RestaurantProps) => {
           {...stylex.props(restaurantStyles.name)}
           onClick={handleOnClickName}
         >
-          {data.name}
+          {data.name} {data.id}
         </div>
       </div>
       {/* <div {...stylex.props(restaurantStyles.name)}>{data.name}</div> */}
@@ -128,6 +148,14 @@ export const Restaurant = ({ data }: RestaurantProps) => {
             onClick={handleCommentPlaceClick}
           ></img>
           <div {...stylex.props(restaurantStyles.svgText)}>{data.love}</div>
+        </div>
+        <div>
+          {data.days[today] == 1 && <div> Day open </div>}
+          <div>Days: {data.days}</div>
+          {isOpenTime(now) && <div>TIME Open </div>}
+          <div>
+            From: {data.from} To: {data.to}
+          </div>
         </div>
       </div>
     </div>

@@ -26,6 +26,11 @@ export const RestaurantListDiv = ({
     success: false,
     name: "",
   })
+
+  // const today = DateTime.now().setZone("America/New_York") //.weekday 1 Monday - 7 Sunday
+  // console.log("today: ", today.weekday)
+  const today = DateTime.now().setZone("America/New_York").weekday - 1 // get the current weekday .weekday 1 Monday - 7 Sunday
+
   const cancelHandler = () => {
     setAddNewPlace(!addNewPlace)
   }
@@ -103,6 +108,7 @@ export const RestaurantListDiv = ({
             .map((place: restaurantDataType, index: number) => {
               return (
                 <Restaurant
+                  today={today}
                   data={place}
                   key={index}
                   //  setZoom={setZoom}

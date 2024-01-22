@@ -12,7 +12,6 @@ import { useEffect, useState } from "react"
 import { useMap } from "@vis.gl/react-google-maps"
 import { commentPlace, lovePlace, unlovePlace } from "../../api/databaseFunc"
 import { DateTime } from "luxon"
-import { isCompositeComponent } from "react-dom/test-utils"
 
 type RestaurantProps = {
   data: restaurantDataType

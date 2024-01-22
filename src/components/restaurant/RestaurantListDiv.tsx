@@ -28,9 +28,9 @@ export const RestaurantListDiv = ({
     name: "",
   })
 
-  const [filterClik, setFilterClick] = useState(false)
   const [clickHandle, setClickHandle] = useState("")
   const [filter, setFilter] = useState("Anytime")
+  const [sorting, setSorting] = useState("Name")
 
   const currentDayOfTheWeek =
     DateTime.now().setZone("America/New_York").weekday - 1 // get the current weekday .weekday 1 Monday - 7 Sunday
@@ -39,15 +39,33 @@ export const RestaurantListDiv = ({
     setAddNewPlace(!addNewPlace)
   }
 
-  const sortTheList = (a: restaurantDataType, b: restaurantDataType) => {
-    const dateA = DateTime.fromISO(a.date)
-    const dateB = DateTime.fromISO(b.date)
+  // const sortTheList = (a: restaurantDataType, b: restaurantDataType) => {
+  //   const dateA = DateTime.fromISO(a.date)
+  //   const dateB = DateTime.fromISO(b.date)
 
-    return dateB.toMillis() - dateA.toMillis()
-  }
+  //   return dateB.toMillis() - dateA.toMillis()
+  // }
 
-  const filterButtonHandler = () => {
-    setFilterClick(!filterClik)
+  const sortingTheList = (a: restaurantDataType, b: restaurantDataType) => {
+    if (sorting == "New") {
+      const dateA = DateTime.fromISO(a.date)
+      const dateB = DateTime.fromISO(b.date)
+
+      return dateB.toMillis() - dateA.toMillis()
+    }
+    if (sorting == "Name") {
+      const nameA = a.name.toLowerCase()
+      const nameB = b.name.toLowerCase()
+      return nameA < nameB ? -1 : nameA > nameB ? 1 : 0
+    }
+
+    if (sorting == "Love") {
+      const loveA = a.love
+      const loveB = b.love
+
+      return loveB - loveA
+      // return loveA - loveB
+    }
   }
 
   return (
@@ -75,44 +93,59 @@ export const RestaurantListDiv = ({
           <div>
             <CustomButton
               text={filter}
-              onClickFn={filterButtonHandler}
+              // onClickFn={filterButtonHandler}
+              onClickFn={() => {
+                if (clickHandle == "") {
+                  setClickHandle("filter")
+                } else {
+                  setClickHandle("")
+                }
+              }}
               bgColor={colors.darkBlue}
               color={colors.offwhite}
               fontSize="1rem"
               padding=".5rem"
               width="8rem"
             />
-            {filterClik && (
+            {/* {filterClik && ( */}
+            {clickHandle == "filter" && (
               <SuggestionDropDown
                 data={["Anytime", "Open Today", "Open Now"]}
                 fontSize="1rem"
                 width="8rem"
                 onSelectFn={(event) => {
                   setFilter(event)
-                  setFilterClick(!filterClik)
+                  // setFilterClick(!filterClik)
+                  setClickHandle("")
                 }}
               />
             )}
           </div>
           <div>
             <CustomButton
-              text="Sorting"
-              onClickFn={filterButtonHandler}
+              text={sorting}
+              onClickFn={() => {
+                if (clickHandle == "") {
+                  setClickHandle("sort")
+                } else {
+                  setClickHandle("")
+                }
+              }}
               bgColor={colors.darkBlue}
               color={colors.offwhite}
               fontSize="1rem"
               padding=".5rem"
               width="8rem"
             />
-            {filterClik && (
+            {clickHandle == "sort" && (
               <SuggestionDropDown
-                data={["Name", "New", "Closest location"]}
+                data={["Name", "New", "Love"]}
                 fontSize="1rem"
                 width="8rem"
                 onSelectFn={(event) => {
                   console.log("Sort: ", event)
-                  // setFilter(event)
-                  // setFilterClick(!filterClik)
+                  setClickHandle("")
+                  setSorting(event)
                 }}
               />
             )}
@@ -178,7 +211,7 @@ export const RestaurantListDiv = ({
         !addNewPlace && (
           <div>
             {getPlacesQuery.data.data
-              ?.sort(sortTheList)
+              ?.sort(sortingTheList)
               .map((place: restaurantDataType, index: number) => {
                 return (
                   <Restaurant

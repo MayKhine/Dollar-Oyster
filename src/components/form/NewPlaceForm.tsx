@@ -507,7 +507,7 @@ export const NewPlaceForm = ({
 
                       setTimeSelect("")
                     }}
-                    type="time"
+                    width="8rem"
                   />
                 )}
 
@@ -555,7 +555,7 @@ export const NewPlaceForm = ({
                       }))
                       setTimeSelect("")
                     }}
-                    type="time"
+                    width="8rem"
                   />
                 )}
                 {enteredFormError.to.length > 0 && (
@@ -681,6 +681,7 @@ const newPlaceFormStyles = stylex.create({
     justifyContent: "center",
     marginRight: ".7rem",
     borderRadius: ".3rem",
+    cursor: "pointer",
   },
   timeLabel: { marginLeft: "3rem" },
   selectTime: {

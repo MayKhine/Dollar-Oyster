@@ -28,6 +28,7 @@ export const FormInput = ({
         onChange={handleInputChangeFn}
         id={id}
         placeholder={placeholder}
+        autoComplete="off"
       />
     </div>
   )

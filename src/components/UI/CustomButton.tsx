@@ -11,6 +11,7 @@ type CustomButtonProps = {
   padding?: string
   type?: string
   borderColor?: string
+  width?: string
 }
 export const CustomButton = ({
   text,
@@ -23,6 +24,7 @@ export const CustomButton = ({
   padding,
   type,
   borderColor,
+  width,
 }: CustomButtonProps) => {
   return (
     <button
@@ -33,7 +35,8 @@ export const CustomButton = ({
           bgColor,
           fontSize,
           padding,
-          borderColor
+          borderColor,
+          width
         )
       )}
       onClick={onClickWithEventFn ? onClickWithEventFn : onClickFn}
@@ -51,17 +54,19 @@ const customButtonStyles = stylex.create({
     bgColor,
     fontSize,
     padding,
-    borderColor
+    borderColor,
+    width
   ) => ({
     backgroundColor: bgColor,
     fontWeight: fontWeight,
     color: color,
     fontSize: fontSize,
     cursor: "pointer",
-    width: "max-content",
+    // width: "max-content",
     padding: padding,
     border: `2px ${borderColor} solid`,
     borderRadius: ".3rem",
     minWidth: "5rem",
+    width: width ? width : "max-content",
   }),
 })

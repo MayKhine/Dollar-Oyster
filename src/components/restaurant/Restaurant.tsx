@@ -15,19 +15,20 @@ import { DateTime } from "luxon"
 
 type RestaurantProps = {
   data: restaurantDataType
-  today: number
+  currentDayOfTheWeek: number
   // setZoom: (val: number) => void
 }
 
-export const Restaurant = ({ data, today }: RestaurantProps) => {
+export const Restaurant = ({ data, currentDayOfTheWeek }: RestaurantProps) => {
   const boston = { lat: 42.36, lng: -71.1 }
   const [position, setPosition] = useState(boston)
   const [zoom, setZoom] = useState(12)
 
-  const now = DateTime.now().setZone("America/New_York")
   // console.log("Now: ", now)
 
-  const isOpenTime = (now: DateTime) => {
+  const isOpenNow = () => {
+    const now = DateTime.now().setZone("America/New_York")
+
     const fromDT = DateTime.fromFormat(data.from, "hh:mm a")
     let toDT = DateTime.fromFormat(data.to, "hh:mm a")
     if (toDT <= DateTime.local().set({ hour: 9, minute: 0 })) {
@@ -39,6 +40,13 @@ export const Restaurant = ({ data, today }: RestaurantProps) => {
       return true
     }
 
+    return false
+  }
+
+  const isOpenToday = () => {
+    if (data.days[currentDayOfTheWeek] == 1) {
+      return true
+    }
     return false
   }
 
@@ -150,9 +158,9 @@ export const Restaurant = ({ data, today }: RestaurantProps) => {
           <div {...stylex.props(restaurantStyles.svgText)}>{data.love}</div>
         </div>
         <div>
-          {data.days[today] == 1 && <div> Day open </div>}
+          {isOpenToday() && <div> Day open </div>}
           <div>Days: {data.days}</div>
-          {isOpenTime(now) && <div>TIME Open </div>}
+          {isOpenNow() && <div>TIME Open </div>}
           <div>
             From: {data.from} To: {data.to}
           </div>

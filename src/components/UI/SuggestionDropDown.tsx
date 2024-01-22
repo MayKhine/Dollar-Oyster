@@ -4,19 +4,21 @@ type SuggestionDropDownProps = {
   // data: Array<google.maps.places.AutocompletePrediction | string>
   data: Array<string>
   onSelectFn: (selection: string) => void
-  type?: string
+  width?: string
+  fontSize?: string
 }
 
 export const SuggestionDropDown = ({
   data,
   onSelectFn,
-  type,
+  width,
+  fontSize,
 }: SuggestionDropDownProps) => {
   return (
     <div
       {...stylex.props(
         suggestionDropDownStyles.base,
-        suggestionDropDownStyles.dynamicOptions(type)
+        suggestionDropDownStyles.dynamicOptions(width, fontSize)
       )}
     >
       {data.map((option, index) => {
@@ -41,15 +43,15 @@ const suggestionDropDownStyles = stylex.create({
     backgroundColor: "pink",
     border: ".1rem solid black",
     overflowY: "scroll",
-    // height: "100%",
-    maxHeight: "15rem",
     flexDirection: "column",
-    position: "relative",
     fontSize: "1.1rem",
-    // position: "absolute",
+    maxHeight: "10rem",
+    // position: "relative",
+    position: "absolute",
+    zIndex: "1",
+    // width: "10rem",
     // width: "100%",
     // maxHeight: "15rem",
-    // zIndex: "1",
     // marginTop: "4.3rem",
   },
   option: {
@@ -59,7 +61,10 @@ const suggestionDropDownStyles = stylex.create({
     },
     padding: ".2rem",
   },
-  dynamicOptions: (type) => ({
-    width: type == "time" ? "8rem" : "100%",
+  dynamicOptions: (width, fontSize) => ({
+    width: width ? width : "100%",
+    // width: "10rem",
+
+    fontSize: fontSize ? fontSize : "1.1rem",
   }),
 })

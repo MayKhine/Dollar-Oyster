@@ -12,14 +12,20 @@ import { useEffect, useState } from "react"
 import { useMap } from "@vis.gl/react-google-maps"
 import { commentPlace, lovePlace, unlovePlace } from "../../api/databaseFunc"
 import { DateTime } from "luxon"
+import { isCompositeComponent } from "react-dom/test-utils"
 
 type RestaurantProps = {
   data: restaurantDataType
   currentDayOfTheWeek: number
+  filter: string
   // setZoom: (val: number) => void
 }
 
-export const Restaurant = ({ data, currentDayOfTheWeek }: RestaurantProps) => {
+export const Restaurant = ({
+  data,
+  currentDayOfTheWeek,
+  filter,
+}: RestaurantProps) => {
   const boston = { lat: 42.36, lng: -71.1 }
   const [position, setPosition] = useState(boston)
   const [zoom, setZoom] = useState(12)
@@ -111,8 +117,7 @@ export const Restaurant = ({ data, currentDayOfTheWeek }: RestaurantProps) => {
     })
   }
 
-  // console.log("Restaurant data: ", data)
-  return (
+  const returnDiv = (
     <div {...stylex.props(restaurantStyles.base)} onMouseOver={handleOnHover}>
       <div {...stylex.props(restaurantStyles.nameAndSvg)}>
         <div
@@ -122,18 +127,15 @@ export const Restaurant = ({ data, currentDayOfTheWeek }: RestaurantProps) => {
           {data.name} {data.id}
         </div>
       </div>
-      {/* <div {...stylex.props(restaurantStyles.name)}>{data.name}</div> */}
       <div {...stylex.props(restaurantStyles.address)}> {data.address} </div>
       <div {...stylex.props(restaurantStyles.notes)}>{data.notes}</div>
       <div {...stylex.props(restaurantStyles.svgDiv)}>
         <div {...stylex.props(restaurantStyles.svgDiv)}>
-          {/* <div {...stylex.props(restaurantStyles.svgDiv2)}> */}
           <img
             src={love}
             {...stylex.props(restaurantStyles.svg)}
             onClick={handleLoveClick}
           ></img>
-          {/* </div> */}
 
           {data.love > 0 && (
             <div {...stylex.props(restaurantStyles.svgText)}>{data.love}</div>
@@ -168,6 +170,20 @@ export const Restaurant = ({ data, currentDayOfTheWeek }: RestaurantProps) => {
       </div>
     </div>
   )
+
+  if (filter == "Open Today" && isOpenToday()) {
+    return returnDiv
+  }
+
+  if (filter == "Open Now" && isOpenNow()) {
+    return returnDiv
+  }
+
+  if (filter == "Anytime") {
+    return returnDiv
+  }
+
+  // return <div> NO DATA </div>
 }
 
 const restaurantStyles = stylex.create({

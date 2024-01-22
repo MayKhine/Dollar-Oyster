@@ -29,6 +29,7 @@ export const RestaurantListDiv = ({
   })
 
   const [filterClik, setFilterClick] = useState(false)
+  const [clickHandle, setClickHandle] = useState("")
   const [filter, setFilter] = useState("Anytime")
 
   const currentDayOfTheWeek =
@@ -46,7 +47,6 @@ export const RestaurantListDiv = ({
   }
 
   const filterButtonHandler = () => {
-    console.log("filter is clicked")
     setFilterClick(!filterClik)
   }
 
@@ -70,31 +70,71 @@ export const RestaurantListDiv = ({
         />
       </div>
 
-      <div {...stylex.props(restaurantListDivStyles.filterDiv)}>
-        <CustomButton
-          text={filter}
-          onClickFn={filterButtonHandler}
-          fontSize="1rem"
-          color={colors.darkBlue}
-          padding=".2rem"
-          width="8rem"
-        />
-        {filterClik && (
-          <SuggestionDropDown
-            data={["Anytime", "Open Today", "Open Now"]}
-            fontSize="1rem"
-            width="8rem"
-            onSelectFn={(event) => {
-              setFilter(event)
-              console.log("Filter select: ", event)
-              setFilterClick(!filterClik)
-            }}
-          />
-        )}
-      </div>
+      {!addNewPlace && (
+        <div {...stylex.props(restaurantListDivStyles.actionsDiv)}>
+          <div>
+            <CustomButton
+              text={filter}
+              onClickFn={filterButtonHandler}
+              bgColor={colors.darkBlue}
+              color={colors.offwhite}
+              fontSize="1rem"
+              padding=".5rem"
+              width="8rem"
+            />
+            {filterClik && (
+              <SuggestionDropDown
+                data={["Anytime", "Open Today", "Open Now"]}
+                fontSize="1rem"
+                width="8rem"
+                onSelectFn={(event) => {
+                  setFilter(event)
+                  setFilterClick(!filterClik)
+                }}
+              />
+            )}
+          </div>
+          <div>
+            <CustomButton
+              text="Sorting"
+              onClickFn={filterButtonHandler}
+              bgColor={colors.darkBlue}
+              color={colors.offwhite}
+              fontSize="1rem"
+              padding=".5rem"
+              width="8rem"
+            />
+            {filterClik && (
+              <SuggestionDropDown
+                data={["Name", "New", "Closest location"]}
+                fontSize="1rem"
+                width="8rem"
+                onSelectFn={(event) => {
+                  console.log("Sort: ", event)
+                  // setFilter(event)
+                  // setFilterClick(!filterClik)
+                }}
+              />
+            )}
+          </div>
+          <div>
+            <CustomButton
+              text={"Add a new location"}
+              bgColor={colors.darkBlue}
+              color={colors.offwhite}
+              fontSize="1rem"
+              padding=".5rem"
+              onClickFn={() => {
+                setAddNewPlace(!addNewPlace)
+                setAddNewPlaceSuccess({ success: false, name: "" })
+              }}
+            />
+          </div>
+        </div>
+      )}
 
       <div>
-        {!addNewPlace && (
+        {/* {!addNewPlace && (
           <div {...stylex.props(restaurantListDivStyles.addNewLocationDiv)}>
             <CustomButton
               text={"Add a new location"}
@@ -108,7 +148,7 @@ export const RestaurantListDiv = ({
               }}
             />
           </div>
-        )}
+        )} */}
         {!addNewPlace && addNewPlaceSuccess.success && (
           <div {...stylex.props(restaurantListDivStyles.addNewLocationText)}>
             Thank you for adding {addNewPlaceSuccess.name}, a new Dollar Oyster
@@ -136,7 +176,7 @@ export const RestaurantListDiv = ({
       {getPlacesQuery.isSuccess &&
         getPlacesQuery.data.data?.length > 0 &&
         !addNewPlace && (
-          <div {...stylex.props(restaurantListDivStyles.listDiv)}>
+          <div>
             {getPlacesQuery.data.data
               ?.sort(sortTheList)
               .map((place: restaurantDataType, index: number) => {
@@ -145,7 +185,7 @@ export const RestaurantListDiv = ({
                     currentDayOfTheWeek={currentDayOfTheWeek}
                     data={place}
                     key={index}
-                    //  setZoom={setZoom}
+                    filter={filter}
                   />
                 )
               })}
@@ -162,6 +202,7 @@ const restaurantListDivStyles = stylex.create({
     marginTop: "5rem",
     // width: "55%",
     // height: "80%",
+    width: "max-content",
     flex: "1",
     // flex: "0",
   },
@@ -170,10 +211,7 @@ const restaurantListDivStyles = stylex.create({
     paddingLeft: "2rem",
     paddingRight: "2rem",
   },
-  listDiv: {
-    // paddingLeft: "1rem",
-    // paddingRight: "1rem",
-  },
+
   addNewLocationDiv: {
     display: "flex",
     justifyContent: "flex-end",
@@ -193,6 +231,12 @@ const restaurantListDivStyles = stylex.create({
     paddingLeft: "2rem",
     width: "8rem",
     color: colors.darkBlue,
-    background: "lightpink",
+    // background: "lightpink",
+  },
+  actionsDiv: {
+    display: "flex",
+    paddingTop: "1rem",
+    paddingLeft: "2rem",
+    gap: "1rem",
   },
 })

@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
+import { colors } from "../../assets/styles/tokens.stylex"
 
 type SuggestionDropDownProps = {
   // data: Array<google.maps.places.AutocompletePrediction | string>
@@ -40,6 +41,7 @@ export const SuggestionDropDown = ({
 
 const suggestionDropDownStyles = stylex.create({
   base: {
+    color: colors.darkBlue,
     backgroundColor: "pink",
     border: ".1rem solid black",
     overflowY: "scroll",

@@ -116,6 +116,20 @@ export const Restaurant = ({
     })
   }
 
+  const daysOfTheWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+  const daysNumArrToDays = () => {
+    let result = ""
+    for (let i = 0; i <= 6; i++) {
+      if (data.days[i] == 1) {
+        // result.push(daysOfTheWeek[i] + ",")
+        result += daysOfTheWeek[i] + ", "
+      }
+    }
+    return result.slice(0, -2)
+  }
+
+  const days = daysNumArrToDays()
+
   const returnDiv = (
     <div {...stylex.props(restaurantStyles.base)} onMouseOver={handleOnHover}>
       <div {...stylex.props(restaurantStyles.nameAndSvg)}>
@@ -123,11 +137,20 @@ export const Restaurant = ({
           {...stylex.props(restaurantStyles.name)}
           onClick={handleOnClickName}
         >
-          {data.name} {data.id}
+          {data.name}
+          {/* {data.id} */}
         </div>
       </div>
       <div {...stylex.props(restaurantStyles.address)}> {data.address} </div>
-      <div {...stylex.props(restaurantStyles.notes)}>{data.notes}</div>
+      <div {...stylex.props(restaurantStyles.hoursDiv)}>
+        <div>Days: {days}</div>
+        <div>
+          From {data.from} to {data.to}
+        </div>
+      </div>
+      {data.notes.length > 0 && (
+        <div {...stylex.props(restaurantStyles.notes)}>{data.notes}</div>
+      )}
       <div {...stylex.props(restaurantStyles.svgDiv)}>
         <div {...stylex.props(restaurantStyles.svgDiv)}>
           <img
@@ -158,14 +181,6 @@ export const Restaurant = ({
           ></img>
           <div {...stylex.props(restaurantStyles.svgText)}>{data.love}</div>
         </div>
-        <div>
-          {isOpenToday() && <div> Day open </div>}
-          <div>Days: {data.days}</div>
-          {isOpenNow() && <div>TIME Open </div>}
-          <div>
-            From: {data.from} To: {data.to}
-          </div>
-        </div>
       </div>
     </div>
   )
@@ -189,16 +204,11 @@ const restaurantStyles = stylex.create({
   base: {
     display: "flex",
     flexDirection: "column",
-    // backgroundColor: colors.green,
-    // backgroundColor: "rgba(177, 226, 188, .2)",
-    // border: `.2rem solid ${colors.green}`,
-    // borderRadius: "1rem",
-
+    width: "100%",
     borderBottom: `.1rem solid ${colors.darkBlue}`,
     padding: "2rem",
     paddingTop: "1.5rem",
     paddingBottom: "1.5rem",
-    // margin: "1rem",
     color: colors.darkBlue,
     backgroundColor: {
       default: colors.green,
@@ -215,6 +225,7 @@ const restaurantStyles = stylex.create({
     fontWeight: "600",
   },
   notes: {
+    paddingTop: "1rem",
     fontSize: "1rem",
     fontWeight: "400",
   },
@@ -238,5 +249,11 @@ const restaurantStyles = stylex.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+
+  hoursDiv: {
+    // backgroundColor: "pink",
+    fontSize: "1rem",
+    fontWeight: "600",
   },
 })

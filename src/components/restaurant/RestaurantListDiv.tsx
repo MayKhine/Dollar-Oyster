@@ -66,6 +66,13 @@ export const RestaurantListDiv = ({
       return loveB - loveA
       // return loveA - loveB
     }
+
+    if (sorting == "Unlove") {
+      const unloveA = a.unlove
+      const unloveB = b.unlove
+
+      return unloveB - unloveA
+    }
   }
 
   return (
@@ -139,7 +146,7 @@ export const RestaurantListDiv = ({
             />
             {clickHandle == "sort" && (
               <SuggestionDropDown
-                data={["Name", "New", "Love"]}
+                data={["Name", "New", "Love", "Unlove"]}
                 fontSize="1rem"
                 width="8rem"
                 onSelectFn={(event) => {

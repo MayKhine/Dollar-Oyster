@@ -10,6 +10,7 @@ import { useState } from "react"
 import { CustomButton } from "../UI/CustomButton"
 import { NewPlaceForm } from "../form/NewPlaceForm"
 import { SuggestionDropDown } from "../UI/SuggestionDropDown"
+import down from "../../assets/images/down.png"
 
 type RestaurantListDivProps = {
   mapPosition: positionType
@@ -100,6 +101,7 @@ export const RestaurantListDiv = ({
           <div>
             <CustomButton
               text={filter}
+              img={down}
               // onClickFn={filterButtonHandler}
               onClickFn={() => {
                 if (clickHandle == "") {
@@ -112,18 +114,18 @@ export const RestaurantListDiv = ({
               color={colors.offwhite}
               fontSize="1rem"
               padding=".5rem"
-              width="8rem"
+              width="9rem"
             />
             {/* {filterClik && ( */}
             {clickHandle == "filter" && (
               <SuggestionDropDown
                 data={["Anytime", "Open Today", "Open Now"]}
                 fontSize="1rem"
-                width="8rem"
+                width="9rem"
                 onSelectFn={(event) => {
-                  setFilter(event)
-                  // setFilterClick(!filterClik)
+                  console.log("Filter: ", event)
                   setClickHandle("")
+                  setFilter(event)
                 }}
               />
             )}
@@ -131,6 +133,7 @@ export const RestaurantListDiv = ({
           <div>
             <CustomButton
               text={sorting}
+              img={down}
               onClickFn={() => {
                 if (clickHandle == "") {
                   setClickHandle("sort")
@@ -142,13 +145,13 @@ export const RestaurantListDiv = ({
               color={colors.offwhite}
               fontSize="1rem"
               padding=".5rem"
-              width="8rem"
+              width="7rem"
             />
             {clickHandle == "sort" && (
               <SuggestionDropDown
                 data={["Name", "New", "Love", "Unlove"]}
                 fontSize="1rem"
-                width="8rem"
+                width="7rem"
                 onSelectFn={(event) => {
                   console.log("Sort: ", event)
                   setClickHandle("")
@@ -243,6 +246,7 @@ const restaurantListDivStyles = stylex.create({
     // width: "100%",
     width: "max-content",
     flex: "1",
+    // height: "80vh",
   },
 
   textDiv: {
@@ -277,5 +281,6 @@ const restaurantListDivStyles = stylex.create({
     paddingTop: "1rem",
     paddingLeft: "2rem",
     gap: "1rem",
+    paddingBottom: "1rem",
   },
 })

@@ -187,13 +187,9 @@ export const Restaurant = ({
 
   if (filter == "Open Today" && isOpenToday()) {
     return returnDiv
-  }
-
-  if (filter == "Open Now" && isOpenToday() && isOpenNow()) {
+  } else if (filter == "Open Now" && isOpenToday() && isOpenNow()) {
     return returnDiv
-  }
-
-  if (filter == "Anytime") {
+  } else if (filter == "Anytime") {
     return returnDiv
   }
 }

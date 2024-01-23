@@ -63,11 +63,15 @@ const appStyles = stylex.create({
     backgroundColor: colors.offwhite,
     display: "flex",
     flexDirection: "column",
+    height: "100vh",
   },
   main: {
     display: "flex",
     flexDirection: "row",
     // backgroundColor: "gray",
     width: "100%",
+    // height: "100%",
+    // height: "100vh",
+    // width: "100vw",
   },
 })

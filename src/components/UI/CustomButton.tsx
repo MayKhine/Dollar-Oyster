@@ -12,6 +12,7 @@ type CustomButtonProps = {
   type?: string
   borderColor?: string
   width?: string
+  img?: string
 }
 export const CustomButton = ({
   text,
@@ -25,6 +26,7 @@ export const CustomButton = ({
   type,
   borderColor,
   width,
+  img,
 }: CustomButtonProps) => {
   return (
     <button
@@ -43,6 +45,7 @@ export const CustomButton = ({
       type={type == "submit" ? "submit" : "button"}
     >
       {text}
+      <img {...stylex.props(customButtonStyles.img)} src={img} />
     </button>
   )
 }
@@ -68,5 +71,12 @@ const customButtonStyles = stylex.create({
     borderRadius: ".3rem",
     minWidth: "5rem",
     width: width ? width : "max-content",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
   }),
+  img: {
+    height: ".9rem",
+    alignSelf: "center",
+  },
 })

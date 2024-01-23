@@ -17,6 +17,7 @@
     "@stylexjs/stylex": "^0.3.0",
     "@tanstack/react-query": "^5.17.9",
     "@types/googlemaps": "^3.43.3",
+    "@types/markerclustererplus": "^2.1.29",
     "@vis.gl/react-google-maps": "^0.4.2",
     "axios": "^1.6.5",
     "luxon": "^3.4.4",

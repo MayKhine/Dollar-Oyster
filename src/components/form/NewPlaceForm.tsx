@@ -333,35 +333,36 @@ export const NewPlaceForm = ({
         <div {...stylex.props(newPlaceFormStyles.inputDiv)}>
           <label {...stylex.props(newPlaceFormStyles.label)}>Name</label>
 
-          <input
-            {...stylex.props(newPlaceFormStyles.input)}
-            value={value}
-            id="name"
-            onChange={(event) => {
-              setValue(event.target.value)
-              handleInputChange("", "name")
+          <div>
+            <input
+              {...stylex.props(newPlaceFormStyles.input)}
+              value={value}
+              id="name"
+              onChange={(event) => {
+                setValue(event.target.value)
+                handleInputChange("", "name")
 
-              handleInputChange("", "address")
-              setEnteredFormError((prevVal) => ({
-                ...prevVal,
-                ["name"]: "",
-              }))
-            }}
-            disabled={!ready}
-            placeholder="Restaurant Name"
-            autoComplete="off"
-          ></input>
+                handleInputChange("", "address")
+                setEnteredFormError((prevVal) => ({
+                  ...prevVal,
+                  ["name"]: "",
+                }))
+              }}
+              disabled={!ready}
+              placeholder="Restaurant Name"
+              autoComplete="off"
+            ></input>
+            {status === "OK" && data.length > 0 && (
+              <SuggestionDropDown
+                data={restaurantData}
+                onSelectFn={(option: string) => {
+                  handleSelectRestaurant(option)
+                }}
+              />
+            )}
+          </div>
           {enteredFormError.name.length > 0 && (
             <ErrorText text={enteredFormError.name} />
-          )}
-
-          {status === "OK" && data.length > 0 && (
-            <SuggestionDropDown
-              data={restaurantData}
-              onSelectFn={(option: string) => {
-                handleSelectRestaurant(option)
-              }}
-            />
           )}
         </div>
 

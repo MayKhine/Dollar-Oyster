@@ -240,12 +240,11 @@ const restaurantListDivStyles = stylex.create({
     backgroundColor: colors.green,
     marginLeft: "45%",
     marginTop: "5rem",
-    // width: "55%",
-    // height: "80%",
+    // width: "100%",
     width: "max-content",
     flex: "1",
-    // flex: "0",
   },
+
   textDiv: {
     marginTop: "1.5rem",
     paddingLeft: "2rem",

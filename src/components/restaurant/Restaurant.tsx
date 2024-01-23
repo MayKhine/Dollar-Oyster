@@ -189,22 +189,20 @@ export const Restaurant = ({
     return returnDiv
   }
 
-  if (filter == "Open Now" && isOpenNow()) {
+  if (filter == "Open Now" && isOpenToday() && isOpenNow()) {
     return returnDiv
   }
 
   if (filter == "Anytime") {
     return returnDiv
   }
-
-  // return <div> NO DATA </div>
 }
 
 const restaurantStyles = stylex.create({
   base: {
     display: "flex",
     flexDirection: "column",
-    width: "100%",
+    // width: "100%",
     borderBottom: `.1rem solid ${colors.darkBlue}`,
     padding: "2rem",
     paddingTop: "1.5rem",
@@ -233,15 +231,11 @@ const restaurantStyles = stylex.create({
   svgDiv: {
     marginTop: ".5rem",
     display: "flex",
-    // width: "4rem",
-    // backgroundColor: colors.offwhite,
     marginRight: ".5rem",
-    // justifyContent: "flex-end",
   },
   svgText: { alignSelf: "center" },
   svg: {
     height: "1.5rem",
-    // height: "100%",
     cursor: "pointer",
     marginRight: ".2rem",
   },
@@ -252,7 +246,6 @@ const restaurantStyles = stylex.create({
   },
 
   hoursDiv: {
-    // backgroundColor: "pink",
     fontSize: "1rem",
     fontWeight: "600",
   },

@@ -28,3 +28,7 @@ pnpm install @react-google-maps/api
 pnpm install luxon
 
 ref: https://boston.eater.com/maps/dollar-oysters-boston
+
+docker run -it --rm -d -p 8080:80/tcp --name oyster_react -v /Users/maykhine/Documents/Projects/dollar-oyster/dist nginx
+
+docker run -it --rm -d -p 8080:80/tcp --name oyster_react -v /Users/maykhine/Documents/Projects/dollar-oyster/dist/:/usr/share/nginx/html:ro -d nginx

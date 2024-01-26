@@ -13,7 +13,6 @@ dist-ssr
 *.local
 *.env
 googleMapConfig.ts
-.dockerignore
 
 # Editor directories and files
 .vscode/*
@@ -27,4 +26,3 @@ googleMapConfig.ts
 *.sw?
 *.env
 googleMapConfig.ts
-.dockerignore
